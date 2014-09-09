@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "DeleteEmail";
+}
+
+@model MyClient.Core.Enums.Enteties.EmailSubject
+
+@using (Html.BeginForm(MVC.Home.DeleteEmail(), FormMethod.Post))
+{
+    <fieldset>
+        <table>
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <h2>Delete Email</h2>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="alert-danger">
+                        @Html.ValidationSummary()
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(es => es.Subject, new { @class = "text-right" })</td>
+                <td>@Html.TextBoxFor(es => es.Subject, new { @class = "input-block-level form-control", @autocomplete = "off" })</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(es => es.Date, new { @class = "text-right" })</td>
+                <td>@Html.TextBoxFor(es => es.Date, new { @class = "input-block-level form-control" })</td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td class="check-box">
+                    <table>
+                        <tr>
+                            <td class="log-btn" colspan="2">
+                                <input class="btn btn-default" type="submit" value="Delete Email" />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+}

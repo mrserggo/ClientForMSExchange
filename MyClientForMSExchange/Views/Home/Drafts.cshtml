@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewBag.Title = "drafts";
+}
+
+@model List<string>
+
+<div class="container well">
+    <div class="row margin_20">
+        <div class="col-lg-2">
+        </div>
+        <div class="col-lg-8">
+            <button type="button" class="btn btn-info" id='loadBtn'>
+                Load News
+                @*<i class="glyphicon glyphicon-refresh"></i> <span id="load_span">Load News</span>*@
+            </button>
+
+            <button type="button" class="btn btn-info" id="deleteBtn">
+                Delete Selected Email
+                @*<i class="glyphicon glyphicon-minus-sign"></i> <span id="delete_span">Delete Selected Email</span>*@
+            </button>
+
+            @Html.ActionLink("New-Email", MVC.Home.NewEmail(), new { @class = "btn btn-info" })
+            @*<button type="button" class="btn btn-info" id="newEmail">
+                    <i class="glyphicon glyphicon-plus-sign"></i> <span id="delete_span">New Email</span>
+                </button>*@
+        </div>
+        <div class="col-lg-2">
+            @*col-sm-offset-2*@
+            <div class="blockquote-reverse">
+                Emails Count
+                <span class="badge" id="count">0</span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-2">
+            <ul class="nav nav-pills nav-stacked" style="max-width: 150px;">
+                <li>@Html.ActionLink("Inbox", MVC.Home.Index(), new { @class = "list-group-item " })</li>
+                <li>@Html.ActionLink("SentItems", MVC.Home.SentItems(), new { @class = "list-group-item" })</li>
+                <li>@Html.ActionLink("DeletedItems", MVC.Home.DeletedItems(), new { @class = "list-group-item" })</li>
+                <li class="active">@Html.ActionLink("Drafts", MVC.Home.Drafts(), new { @class = "list-group-item" })</li>
+            </ul>
+        </div>
+        <div class="col-lg-3">
+            <div id="listTitles" class="classListTitles">
+            </div>
+        </div>
+        <div class="col-lg-7 img-rounded">
+            <div id="newsContent" class="classContent">
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/bundles/MyJS")
+@Styles.Render("~/Content/css")
+
+

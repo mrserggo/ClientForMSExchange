@@ -1,0 +1,59 @@
+﻿@using MyClientForMSExchange.Models
+@{
+    ViewBag.Title = "Login";
+}
+@model MyClientForMSExchange.Models.LoginModel
+
+
+@using (Html.BeginForm(MVC.Account.Login(), FormMethod.Post, new { @class = "login-form " }))
+{
+    <fieldset>
+        <table>
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <h2>Sign in</h2>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="alert-danger">
+                        @Html.ValidationSummary()
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.Email, new { @class = "text-right" })</td>
+                <td>@Html.TextBoxFor(m => m.Email, new { @class = "input-block-level form-control", @type = "email", @autocomplete = "off" })</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td class="text-danger">@Html.ValidationMessageFor(m => m.Email)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.Password, new { @class = "text-right" })</td>
+                <td>@Html.PasswordFor(m => m.Password, new { @class = "input-block-level form-control", @autocomplete = "off" })</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td class="text-danger">@Html.ValidationMessageFor(m => m.Password)</td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td class="check-box">
+                    <table>
+                        <tr>
+                            <td class="check-box-for">@Html.CheckBoxFor(m => m.IsPersistent)</td>
+                            <td class="check-box-label">@Html.LabelFor(m => m.IsPersistent)</td>
+                        </tr>
+                        <tr>
+                            <td class="log-btn" colspan="2">
+                                <input class="btn btn-primary btn-lg" type="submit" value="Log On" />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+}

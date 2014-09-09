@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewBag.Title = "NewEmail";
+}
+@model MyClientForMSExchange.Models.Entities.Email
+
+@using (Html.BeginForm(MVC.Home.NewEmail(), FormMethod.Post))
+{
+    <fieldset>
+        <table>
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <h2>Send New E-mail</h2>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="alert-danger">
+                        @Html.ValidationSummary()
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(e => e.EmailOwner, new { @class = "text-right" })</td>
+                <td>@Html.TextBoxFor(e => e.EmailOwner, new { @class = "input-block-level form-control", @type = "email", @autocomplete = "off" })</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td class="text-danger">@Html.ValidationMessageFor(e => e.EmailOwner)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(e => e.Subject, new { @class = "text-right" })</td>
+                <td>@Html.TextBoxFor(e => e.Subject, new { @class = "input-block-level form-control" })</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(e => e.Body, new { @class = "text-right" })</td>
+                <td>@Html.TextAreaFor(e => e.Body, new { @class = "input-block-level form-control" })</td>
+            </tr>
+
+            <tr>
+                <td>&nbsp;</td>
+                <td class="check-box">
+                    <table>
+                        <tr>
+                            <td class="log-btn" colspan="2">
+                                <input class="btn btn-default" type="submit" value="Send E-mail" />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+}
