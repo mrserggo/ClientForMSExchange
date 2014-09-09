@@ -1,0 +1,9 @@
+D:\Projects\Test\MyClientForMSExchange\Core.EntityFrameworkDAL\bin\Debug\Core.EntityFrameworkDAL.dll
+D:\Projects\Test\MyClientForMSExchange\Core.EntityFrameworkDAL\bin\Debug\Core.EntityFrameworkDAL.pdb
+D:\Projects\Test\MyClientForMSExchange\Core.EntityFrameworkDAL\obj\Debug\Core.EntityFrameworkDAL.dll
+D:\Projects\Test\MyClientForMSExchange\Core.EntityFrameworkDAL\obj\Debug\Core.EntityFrameworkDAL.pdb
+D:\Projects\Test\MyClientForMSExchange\Core.EntityFrameworkDAL\bin\Debug\Core.EntityFrameworkDAL.dll.config
+D:\Projects\Test\MyClientForMSExchange\Core.EntityFrameworkDAL\bin\Debug\EntityFramework.dll
+D:\Projects\Test\MyClientForMSExchange\Core.EntityFrameworkDAL\bin\Debug\EntityFramework.SqlServer.dll
+D:\Projects\Test\MyClientForMSExchange\Core.EntityFrameworkDAL\bin\Debug\EntityFramework.xml
+D:\Projects\Test\MyClientForMSExchange\Core.EntityFrameworkDAL\bin\Debug\EntityFramework.SqlServer.xml

@@ -1,0 +1,5 @@
+D:\Projects\Test\MyClientForMSExchange\MyClient.Core\bin\Debug\MyClient.Core.dll
+D:\Projects\Test\MyClientForMSExchange\MyClient.Core\bin\Debug\MyClient.Core.pdb
+D:\Projects\Test\MyClientForMSExchange\MyClient.Core\obj\Debug\MyClient.Core.csprojResolveAssemblyReference.cache
+D:\Projects\Test\MyClientForMSExchange\MyClient.Core\obj\Debug\MyClient.Core.dll
+D:\Projects\Test\MyClientForMSExchange\MyClient.Core\obj\Debug\MyClient.Core.pdb
