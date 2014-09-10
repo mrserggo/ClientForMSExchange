@@ -1,7 +1,6 @@
 ﻿@{
     ViewBag.Title = "SentItems";
 }
-@model List<Core.EntityFrameworkDAL.Entities.EmailSubject>
 
 @Styles.Render("~/Content/css")
 
@@ -21,7 +20,6 @@
             @Html.ActionLink("New-Email", MVC.Home.NewEmail(), new { @class = "btn btn-info" })
         </div>
         <div class="col-lg-2">
-            @*col-sm-offset-2*@
             <div class="blockquote-reverse">
                 Emails Count
                 <span class="badge" id="count">0</span>
@@ -50,5 +48,5 @@
 
 @Scripts.Render("~/bundles/jquery")
 @Scripts.Render("~/bundles/bootstrap")
-@Scripts.Render("~/bundles/MyJS")
+@Scripts.Render("~/bundles/msexchangeclient")
 
