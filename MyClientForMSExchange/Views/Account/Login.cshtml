@@ -1,9 +1,7 @@
-﻿@using MyClientForMSExchange.Models
-@{
+﻿@{
     ViewBag.Title = "Login";
 }
 @model MyClientForMSExchange.Models.LoginModel
-
 
 @using (Html.BeginForm(MVC.Account.Login(), FormMethod.Post, new { @class = "login-form " }))
 {
@@ -40,14 +38,14 @@
             </tr>
             <tr>
                 <td>&nbsp;</td>
-                <td class="check-box">
+                <td>
                     <table>
                         <tr>
-                            <td class="check-box-for">@Html.CheckBoxFor(m => m.IsPersistent)</td>
-                            <td class="check-box-label">@Html.LabelFor(m => m.IsPersistent)</td>
+                            <td>@Html.CheckBoxFor(m => m.IsPersistent)</td>
+                            <td>@Html.LabelFor(m => m.IsPersistent)</td>
                         </tr>
                         <tr>
-                            <td class="log-btn" colspan="2">
+                            <td colspan="2">
                                 <input class="btn btn-primary btn-lg" type="submit" value="Log On" />
                             </td>
                         </tr>

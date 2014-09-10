@@ -1,28 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace MyClientForMSExchange.Helpers
+﻿namespace MyClientForMSExchange.Helpers
 {
-    using MyClientForMSExchange.Models.Entities;
+    using Core.EntityFrameworkDAL.Entities;
 
+    /// <summary>
+    /// The AuthenticationHelper interface.
+    /// </summary>
     public interface IAuthenticationHelper
     {
         #region Methods
 
-        Boolean Login(String userName, String password, Boolean isPersistent);
+        /// <summary>
+        /// The login.
+        /// </summary>
+        /// <param name="userName">
+        /// The user name.
+        /// </param>
+        /// <param name="password">
+        /// The password.
+        /// </param>
+        /// <param name="isPersistent">
+        /// The is persistent.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        bool Login(string userName, string password, bool isPersistent);
 
+        /// <summary>
+        /// The log out.
+        /// </summary>
         void LogOut();
 
-        Boolean IsAuthentificated();
+        /// <summary>
+        /// The is authentificated.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        bool IsAuthentificated();
 
         /// <summary>
         /// Creates the cookie.
         /// </summary>
         /// <param name="user">The user.</param>
         /// <param name="isPersistent">The is persistent.</param>
-        void CreateCookie(Client user, Boolean isPersistent);
+        void CreateCookie(Client user, bool isPersistent);
 
         #endregion
     }

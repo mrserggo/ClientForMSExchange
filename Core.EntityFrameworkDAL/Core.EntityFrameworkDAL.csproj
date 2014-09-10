@@ -46,10 +46,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Client.cs" />
+    <Compile Include="Entities\Email.cs" />
+    <Compile Include="Entities\EmailSubject.cs" />
+    <Compile Include="Entities\MailItem.cs" />
+    <Compile Include="Entities\SubjectWithId.cs" />
+    <Compile Include="Enums\Enums.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\Interfaces\IEntity.cs" />
     <Compile Include="Repositories\Interfaces\IReplository.cs" />
-    <Compile Include="Repositories\Interfaces\Repository.cs" />
+    <Compile Include="Repositories\Repository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

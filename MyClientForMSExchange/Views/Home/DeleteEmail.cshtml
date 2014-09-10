@@ -2,7 +2,7 @@
     ViewBag.Title = "DeleteEmail";
 }
 
-@model MyClient.Core.Enums.Enteties.EmailSubject
+@model Core.EntityFrameworkDAL.Entities.EmailSubject
 
 @using (Html.BeginForm(MVC.Home.DeleteEmail(), FormMethod.Post))
 {
@@ -31,10 +31,10 @@
             </tr>
             <tr>
                 <td>&nbsp;</td>
-                <td class="check-box">
+                <td>
                     <table>
                         <tr>
-                            <td class="log-btn" colspan="2">
+                            <td colspan="2">
                                 <input class="btn btn-default" type="submit" value="Delete Email" />
                             </td>
                         </tr>

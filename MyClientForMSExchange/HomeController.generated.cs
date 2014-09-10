@@ -57,6 +57,12 @@ namespace MyClientForMSExchange.Controllers
             return RedirectToActionPermanent(taskResult.Result);
         }
 
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public virtual System.Web.Mvc.ActionResult DeleteEmailById()
+        {
+            return new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.DeleteEmailById);
+        }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public HomeController Actions { get { return MVC.Home; } }
@@ -80,6 +86,7 @@ namespace MyClientForMSExchange.Controllers
             public readonly string Drafts = "Drafts";
             public readonly string NewEmail = "NewEmail";
             public readonly string DeleteEmail = "DeleteEmail";
+            public readonly string DeleteEmailById = "DeleteEmailById";
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -92,6 +99,7 @@ namespace MyClientForMSExchange.Controllers
             public const string Drafts = "Drafts";
             public const string NewEmail = "NewEmail";
             public const string DeleteEmail = "DeleteEmail";
+            public const string DeleteEmailById = "DeleteEmailById";
         }
 
 
@@ -103,6 +111,23 @@ namespace MyClientForMSExchange.Controllers
         {
             public readonly string emailModel = "emailModel";
         }
+        static readonly ActionParamsClass_DeleteEmail s_params_DeleteEmail = new ActionParamsClass_DeleteEmail();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_DeleteEmail DeleteEmailParams { get { return s_params_DeleteEmail; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_DeleteEmail
+        {
+            public readonly string emailSubject = "emailSubject";
+        }
+        static readonly ActionParamsClass_DeleteEmailById s_params_DeleteEmailById = new ActionParamsClass_DeleteEmailById();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_DeleteEmailById DeleteEmailByIdParams { get { return s_params_DeleteEmailById; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_DeleteEmailById
+        {
+            public readonly string id = "id";
+            public readonly string emailStringCatalog = "emailStringCatalog";
+        }
         static readonly ViewsClass s_views = new ViewsClass();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public ViewsClass Views { get { return s_views; } }
@@ -113,8 +138,6 @@ namespace MyClientForMSExchange.Controllers
             public _ViewNamesClass ViewNames { get { return s_ViewNames; } }
             public class _ViewNamesClass
             {
-                public readonly string About = "About";
-                public readonly string Contact = "Contact";
                 public readonly string DeletedItems = "DeletedItems";
                 public readonly string DeleteEmail = "DeleteEmail";
                 public readonly string Drafts = "Drafts";
@@ -122,8 +145,6 @@ namespace MyClientForMSExchange.Controllers
                 public readonly string NewEmail = "NewEmail";
                 public readonly string SentItems = "SentItems";
             }
-            public readonly string About = "~/Views/Home/About.cshtml";
-            public readonly string Contact = "~/Views/Home/Contact.cshtml";
             public readonly string DeletedItems = "~/Views/Home/DeletedItems.cshtml";
             public readonly string DeleteEmail = "~/Views/Home/DeleteEmail.cshtml";
             public readonly string Drafts = "~/Views/Home/Drafts.cshtml";
@@ -205,10 +226,10 @@ namespace MyClientForMSExchange.Controllers
         }
 
         [NonAction]
-        partial void NewEmailOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, MyClientForMSExchange.Models.Entities.Email emailModel);
+        partial void NewEmailOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, Core.EntityFrameworkDAL.Entities.Email emailModel);
 
         [NonAction]
-        public override System.Web.Mvc.ActionResult NewEmail(MyClientForMSExchange.Models.Entities.Email emailModel)
+        public override System.Web.Mvc.ActionResult NewEmail(Core.EntityFrameworkDAL.Entities.Email emailModel)
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.NewEmail);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "emailModel", emailModel);
@@ -224,6 +245,31 @@ namespace MyClientForMSExchange.Controllers
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.DeleteEmail);
             DeleteEmailOverride(callInfo);
+            return callInfo;
+        }
+
+        [NonAction]
+        partial void DeleteEmailOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, Core.EntityFrameworkDAL.Entities.EmailSubject emailSubject);
+
+        [NonAction]
+        public override System.Web.Mvc.ActionResult DeleteEmail(Core.EntityFrameworkDAL.Entities.EmailSubject emailSubject)
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.DeleteEmail);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "emailSubject", emailSubject);
+            DeleteEmailOverride(callInfo, emailSubject);
+            return callInfo;
+        }
+
+        [NonAction]
+        partial void DeleteEmailByIdOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string id, string emailStringCatalog);
+
+        [NonAction]
+        public override System.Web.Mvc.ActionResult DeleteEmailById(string id, string emailStringCatalog)
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.DeleteEmailById);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "id", id);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "emailStringCatalog", emailStringCatalog);
+            DeleteEmailByIdOverride(callInfo, id, emailStringCatalog);
             return callInfo;
         }
 

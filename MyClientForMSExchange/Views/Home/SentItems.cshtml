@@ -1,7 +1,9 @@
 ﻿@{
     ViewBag.Title = "SentItems";
 }
-@model List<MyClient.Core.Enums.Enteties.EmailSubject>
+@model List<Core.EntityFrameworkDAL.Entities.EmailSubject>
+
+@Styles.Render("~/Content/css")
 
 <div class="container well">
     <div class="row margin_20">
@@ -10,18 +12,13 @@
         <div class="col-lg-8">
             <button type="button" class="btn btn-info" id='loadBtn'>
                 Load News
-                @*<i class="glyphicon glyphicon-refresh"></i> <span id="load_span">Load News</span>*@
             </button>
 
             <button type="button" class="btn btn-info" id="deleteBtn">
                 Delete Selected Email
-                @*<i class="glyphicon glyphicon-minus-sign"></i> <span id="delete_span">Delete Selected Email</span>*@
             </button>
 
             @Html.ActionLink("New-Email", MVC.Home.NewEmail(), new { @class = "btn btn-info" })
-            @*<button type="button" class="btn btn-info" id="newEmail">
-                    <i class="glyphicon glyphicon-plus-sign"></i> <span id="delete_span">New Email</span>
-                </button>*@
         </div>
         <div class="col-lg-2">
             @*col-sm-offset-2*@
@@ -54,15 +51,4 @@
 @Scripts.Render("~/bundles/jquery")
 @Scripts.Render("~/bundles/bootstrap")
 @Scripts.Render("~/bundles/MyJS")
-@Styles.Render("~/Content/css")
-
-
-
-
-@*<ul>
-    @foreach (var subject in Model)
-    {
-        <li>@subject.Subject-----------------Date: @subject.Date</li>
-    }
-</ul>*@
 

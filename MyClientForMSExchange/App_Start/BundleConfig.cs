@@ -1,11 +1,20 @@
-﻿using System.Web;
-using System.Web.Optimization;
-
-namespace MyClientForMSExchange
+﻿namespace MyClientForMSExchange
 {
+    using System.Web.Optimization;
+
+    /// <summary>
+    /// The bundle config.
+    /// </summary>
     public class BundleConfig
     {
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
+
+        /// <summary>
+        /// The register bundles.
+        /// </summary>
+        /// <param name="bundles">
+        /// The bundles.
+        /// </param>
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
@@ -23,13 +32,13 @@ namespace MyClientForMSExchange
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/MyJS").Include(
-           "~/Scripts/MyJS.js"));
+            bundles.Add(new ScriptBundle("~/bundles/msexchangeclient").Include(
+           "~/Scripts/custom.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css", 
-                      "~/Content/MyStyles.css"));
+                      "~/Content/CustomStyles.css"));
 
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862

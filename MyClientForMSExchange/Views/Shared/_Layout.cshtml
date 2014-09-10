@@ -20,14 +20,8 @@
                     </button>
                     <div>
                         <div class="floatleft">
-                            @Html.ActionLink("Client for managing MS Exchane", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                            @Html.ActionLink("Client for managing MS Exchange", MVC.Home.Index(), new { @class = "navbar-brand" })
                         </div>
-                        @*<div style="float: left;">
-                            <p>@Html.ActionLink("New-Email", MVC.Home.NewEmail(), new { @class = "btn btn-primary btn-lg" })</p>
-                        </div>
-                        <div style="float: left;">
-                            <p>@Html.ActionLink("Delete-Email", MVC.Home.DeleteEmail(), new { @class = "btn btn-primary btn-lg" })</p>
-                        </div>*@
                     </div>      
                     </div>
                 <div class="navbar-collapse collapse">
@@ -47,7 +41,7 @@
             @RenderBody()
             <hr />
             <footer>
-                <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+                <p>&copy; @DateTime.Now.Year - Client for managing MS Exchange</p>
             </footer>
         </div>
 

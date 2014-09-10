@@ -6,27 +6,60 @@
     using MyClientForMSExchange.Helpers;
     using Ninject;
 
+    /// <summary>
+    /// The ninject dependency resolver.
+    /// </summary>
     public class NinjectDependencyResolver : IDependencyResolver
     {
+        /// <summary>
+        /// The kernel.
+        /// </summary>
         private IKernel kernel;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NinjectDependencyResolver"/> class.
+        /// </summary>
         public NinjectDependencyResolver()
         {
-            kernel = new StandardKernel();
-            AddBindings();
-        }
-        public object GetService(Type serviceType)
-        {
-            return kernel.TryGet(serviceType);
-        }
-        public IEnumerable<object> GetServices(Type serviceType)
-        {
-            return kernel.GetAll(serviceType);
-        }
-        private void AddBindings()
-        {
-            kernel.Bind<IAuthenticationHelper>().To<FormsAuthenticationHelper>();
-            kernel.Bind<IMSExchangeHelper>().To<MSExchangeHelper>();
+            this.kernel = new StandardKernel();
+            this.AddBindings();
         }
 
+        /// <summary>
+        /// The get service.
+        /// </summary>
+        /// <param name="serviceType">
+        /// The service type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="object"/>.
+        /// </returns>
+        public object GetService(Type serviceType)
+        {
+            return this.kernel.TryGet(serviceType);
+        }
+
+        /// <summary>
+        /// The get services.
+        /// </summary>
+        /// <param name="serviceType">
+        /// The service type.
+        /// </param>
+        /// <returns>
+        /// The <see />.
+        /// </returns>
+        public IEnumerable<object> GetServices(Type serviceType)
+        {
+            return this.kernel.GetAll(serviceType);
+        }
+
+        /// <summary>
+        /// The add bindings.
+        /// </summary>
+        private void AddBindings()
+        {
+            this.kernel.Bind<IAuthenticationHelper>().To<FormsAuthenticationHelper>();
+            this.kernel.Bind<IMSExchangeHelper>().To<MSExchangeHelper>();
+        }
     }
 }

@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Helpers;
-using System.Web.Mvc;
-using System.Web.Security;
-using MyClientForMSExchange.Models.Entities;
-using MyClientForMSExchange.Repositories;
-using MyClientForMSExchange.Repositories.Interfaces;
-
-namespace MyClientForMSExchange.Helpers
+﻿namespace MyClientForMSExchange.Helpers
 {
+    using System;
     using System.Configuration;
+    using System.Linq;
+    using System.Web;
+    using System.Web.Security;
+
+    using Core.EntityFrameworkDAL.Entities;
+    using Core.EntityFrameworkDAL.Repositories;
+    using Core.EntityFrameworkDAL.Repositories.Interfaces;
 
     using MyClientForMSExchange.Models;
 
@@ -27,17 +24,17 @@ namespace MyClientForMSExchange.Helpers
         /// <param name="password">The password.</param>
         /// <param name="isPersistent">if set to <c>true</c> [is persistent].</param>
         /// <returns></returns>
-        public Boolean Login(String userEmail, String password, Boolean isPersistent)
+        public bool Login(string userEmail, string password, bool isPersistent)
         {
             var rep = new Repository<Client>(new MyClientForMSExchangeContainer());
             Client client = rep.SearchFor(p => p.Email == userEmail).SingleOrDefault();
 
             if ((client != null) && (MyCryptoHelper.DecryptStringAES(client.Password, ConfigurationManager.AppSettings["KeyForAESCrypto"]) == password))
             {
-                //client.Password = password;
-                CreateCookie(client, isPersistent);
+                this.CreateCookie(client, isPersistent);
                 return true;
             }
+
             return false;
         }
 
@@ -53,7 +50,7 @@ namespace MyClientForMSExchange.Helpers
         /// Determines whether this instance is authentificated.
         /// </summary>
         /// <returns></returns>
-        public Boolean IsAuthentificated()
+        public bool IsAuthentificated()
         {
             return (HttpContext.Current != null) && (HttpContext.Current.Request.Cookies.Get(FormsAuthentication.FormsCookieName) != null);
         }
@@ -63,7 +60,7 @@ namespace MyClientForMSExchange.Helpers
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="isPersistent">if set to <c>true</c> [is persistent].</param>
-        public void CreateCookie(Client client, Boolean isPersistent)
+        public void CreateCookie(Client client, bool isPersistent)
         {
             var ticket = new FormsAuthenticationTicket(
                   1,
@@ -71,7 +68,7 @@ namespace MyClientForMSExchange.Helpers
                   DateTime.Now,
                   DateTime.Now.Add(FormsAuthentication.Timeout),
                   isPersistent,
-                  String.Empty,
+                  string.Empty,
                   FormsAuthentication.FormsCookiePath);
 
             var encTicket = FormsAuthentication.Encrypt(ticket);
@@ -93,7 +90,7 @@ namespace MyClientForMSExchange.Helpers
                 {
                     var login = HttpContext.Current.User.Identity.Name;
 
-                    if (login != String.Empty)
+                    if (login != string.Empty)
                     {
                         var formsAuthenticationTicket = FormsAuthentication.Decrypt(login);
 
@@ -105,7 +102,7 @@ namespace MyClientForMSExchange.Helpers
 
                             if (currentClient == null || !currentClient.Email.Equals(name))
                             {
-                                if (String.IsNullOrEmpty(login))
+                                if (string.IsNullOrEmpty(login))
                                 {
                                     HttpContext.Current.Session["authsession"] = null;
                                 }

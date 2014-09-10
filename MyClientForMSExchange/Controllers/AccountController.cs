@@ -1,18 +1,24 @@
 ﻿namespace MyClientForMSExchange.Controllers
 {
-    using System;
     using System.Web.Mvc;
-
     using MyClientForMSExchange.Helpers;
     using MyClientForMSExchange.Models;
-
     using Ninject;
 
+    /// <summary>
+    /// The account controller.
+    /// </summary>
     public partial class AccountController : Controller
     {
+        /// <summary>
+        /// Gets or sets the forms authentication helper.
+        /// </summary>
         [Inject]
         public IAuthenticationHelper FormsAuthenticationHelper { get; set; }
 
+        /// <summary>
+        /// Gets or sets the ms exchange helper.
+        /// </summary>
         [Inject]
         public IMSExchangeHelper MSExchangeHelper { get; set; }
 
@@ -22,7 +28,7 @@
         /// <param name="returnUrl">The return URL.</param>
         /// <returns></returns>
         [HttpGet]
-        public virtual ActionResult Login(String returnUrl)
+        public virtual ActionResult Login(string returnUrl)
         {
             if (FormsAuthenticationHelper.IsAuthentificated())
             {
@@ -47,18 +53,19 @@
                     var isAuthentificated = FormsAuthenticationHelper.Login(loginModel.Email, loginModel.Password, loginModel.IsPersistent);
                     if (isAuthentificated)
                     {
-                        if (!String.IsNullOrEmpty(loginModel.ReturnUrl))
+                        if (!string.IsNullOrEmpty(loginModel.ReturnUrl))
                         {
                             return Redirect(loginModel.ReturnUrl);
                         }
+
                         return RedirectToAction(MVC.Home.Index());
                     }
                     
-                    ModelState.AddModelError(String.Empty, "Login or password is uncorrect");
+                    ModelState.AddModelError(string.Empty, "Login or password is uncorrect");
                 }
                 else
                 {
-                    ModelState.AddModelError(String.Empty, "Uncorrect data for enrty to the system of Client MS Exchange");
+                    ModelState.AddModelError(string.Empty, "Uncorrect data for enrty to the system of Client MS Exchange");
                 }
 
                 return View(loginModel);

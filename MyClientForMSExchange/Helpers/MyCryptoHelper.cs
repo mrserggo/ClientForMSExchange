@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace MyClientForMSExchange.Helpers
+﻿namespace MyClientForMSExchange.Helpers
 {
+    using System;
     using System.IO;
     using System.Security.Cryptography;
     using System.Text;
@@ -14,28 +10,43 @@ namespace MyClientForMSExchange.Helpers
     /// </summary>
     public class MyCryptoHelper
     {
-        private static byte[] _salt = Encoding.ASCII.GetBytes("o6806642kbM7c5");
+        /// <summary>
+        /// The _salt.
+        /// </summary>
+        private static byte[] salt = Encoding.ASCII.GetBytes("o6806642kbM7c5");
 
         /// <summary>
         /// Encrypt the given string using AES.  The string can be decrypted using 
         /// DecryptStringAES().  The sharedSecret parameters must match.
         /// </summary>
-        /// <param name="plainText">The text to encrypt.</param>
-        /// <param name="sharedSecret">A password used to generate a key for encryption.</param>
+        /// <param name="plainText">
+        /// The text to encrypt.
+        /// </param>
+        /// <param name="sharedSecret">
+        /// A password used to generate a key for encryption.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         public static string EncryptStringAES(string plainText, string sharedSecret)
         {
             if (string.IsNullOrEmpty(plainText))
+            {
                 throw new ArgumentNullException("plainText");
-            if (string.IsNullOrEmpty(sharedSecret))
-                throw new ArgumentNullException("sharedSecret");
+            }
 
-            string outStr = null;                       // Encrypted string to return
+            if (string.IsNullOrEmpty(sharedSecret))
+            {
+                throw new ArgumentNullException("sharedSecret");
+            }
+
+            string outStr;                       // Encrypted string to return
             RijndaelManaged aesAlg = null;              // RijndaelManaged object used to encrypt the data.
 
             try
             {
                 // generate the key from the shared secret and the salt
-                Rfc2898DeriveBytes key = new Rfc2898DeriveBytes(sharedSecret, _salt);
+                var key = new Rfc2898DeriveBytes(sharedSecret, salt);
 
                 // Create a RijndaelManaged object
                 aesAlg = new RijndaelManaged();
@@ -50,14 +61,13 @@ namespace MyClientForMSExchange.Helpers
                     // prepend the IV
                     msEncrypt.Write(BitConverter.GetBytes(aesAlg.IV.Length), 0, sizeof(int));
                     msEncrypt.Write(aesAlg.IV, 0, aesAlg.IV.Length);
-                    using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+                    using (var csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+                    using (var swEncrypt = new StreamWriter(csEncrypt))
                     {
-                        using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
-                        {
-                            //Write all data to the stream.
-                            swEncrypt.Write(plainText);
-                        }
+                        // Write all data to the stream.
+                        swEncrypt.Write(plainText);
                     }
+
                     outStr = Convert.ToBase64String(msEncrypt.ToArray());
                 }
             }
@@ -65,7 +75,9 @@ namespace MyClientForMSExchange.Helpers
             {
                 // Clear the RijndaelManaged object.
                 if (aesAlg != null)
+                {
                     aesAlg.Clear();
+                }
             }
 
             // Return the encrypted bytes from the memory stream.
@@ -76,44 +88,51 @@ namespace MyClientForMSExchange.Helpers
         /// Decrypt the given string.  Assumes the string was encrypted using 
         /// EncryptStringAES(), using an identical sharedSecret.
         /// </summary>
-        /// <param name="cipherText">The text to decrypt.</param>
-        /// <param name="sharedSecret">A password used to generate a key for decryption.</param>
+        /// <param name="cipherText">
+        /// The text to decrypt.
+        /// </param>
+        /// <param name="sharedSecret">
+        /// A password used to generate a key for decryption.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         public static string DecryptStringAES(string cipherText, string sharedSecret)
         {
             if (string.IsNullOrEmpty(cipherText))
+            {
                 throw new ArgumentNullException("cipherText");
-            if (string.IsNullOrEmpty(sharedSecret))
-                throw new ArgumentNullException("sharedSecret");
+            }
 
-            // Declare the RijndaelManaged object
-            // used to decrypt the data.
+            if (string.IsNullOrEmpty(sharedSecret))
+            {
+                throw new ArgumentNullException("sharedSecret");
+            }
+
             RijndaelManaged aesAlg = null;
 
-            // Declare the string used to hold
-            // the decrypted text.
-            string plaintext = null;
+            string plaintext;
 
             try
             {
                 // generate the key from the shared secret and the salt
-                Rfc2898DeriveBytes key = new Rfc2898DeriveBytes(sharedSecret, _salt);
+                var key = new Rfc2898DeriveBytes(sharedSecret, salt);
 
                 // Create the streams used for decryption.                
                 byte[] bytes = Convert.FromBase64String(cipherText);
-                using (MemoryStream msDecrypt = new MemoryStream(bytes))
+                using (var msDecrypt = new MemoryStream(bytes))
                 {
                     aesAlg = new RijndaelManaged();
                     aesAlg.Key = key.GetBytes(aesAlg.KeySize / 8);
+
                     // Get the initialization vector from the encrypted stream
                     aesAlg.IV = ReadByteArray(msDecrypt);
+
                     // Create a decrytor to perform the stream transform.
                     ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
-                    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                    using (var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
                     {
-                        using (StreamReader srDecrypt = new StreamReader(csDecrypt))
-
-                            // Read the decrypted bytes from the decrypting stream
-                            // and place them in a string.
+                        using (var srDecrypt = new StreamReader(csDecrypt))
                             plaintext = srDecrypt.ReadToEnd();
                     }
                 }
@@ -122,12 +141,25 @@ namespace MyClientForMSExchange.Helpers
             {
                 // Clear the RijndaelManaged object.
                 if (aesAlg != null)
+                {
                     aesAlg.Clear();
+                }
             }
 
             return plaintext;
         }
 
+        /// <summary>
+        /// The read byte array.
+        /// </summary>
+        /// <param name="s">
+        /// The s.
+        /// </param>
+        /// <returns>
+        /// The <see />.
+        /// </returns>
+        /// <exception cref="SystemException">
+        /// </exception>
         private static byte[] ReadByteArray(Stream s)
         {
             byte[] rawLength = new byte[sizeof(int)];

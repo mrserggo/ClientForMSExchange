@@ -1,8 +1,7 @@
 ﻿namespace MyClientForMSExchange.Models
 {
     using System.Data.Entity;
-
-    using MyClientForMSExchange.Models.Entities;
+    using Core.EntityFrameworkDAL.Entities;
 
     /// <summary>
     /// The my client for ms evchange container.

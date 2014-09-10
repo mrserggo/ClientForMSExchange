@@ -1,65 +1,95 @@
-﻿using System;
-using System.Web.Mvc;
-using MyClient.Core.Enums;
-using MyClientForMSExchange.Helpers;
-using MyClientForMSExchange.Models.Entities;
-using Ninject;
-
-namespace MyClientForMSExchange.Controllers
+﻿namespace MyClientForMSExchange.Controllers
 {
+    using System.Web.Mvc;
 
+    using Core.EntityFrameworkDAL.Entities;
+    using Core.EntityFrameworkDAL.Enums;
+
+    using MyClientForMSExchange.Helpers;
+
+    using Ninject;
+
+    /// <summary>
+    /// The home controller.
+    /// </summary>
     [Authorize]
     public partial class HomeController : Controller
     {
+        /// <summary>
+        /// Gets or sets the forms authentication helper.
+        /// </summary>
         [Inject]
         public IAuthenticationHelper FormsAuthenticationHelper { get; set; }
 
+        /// <summary>
+        /// Gets or sets the ms exchange helper.
+        /// </summary>
         [Inject]
         public IMSExchangeHelper MSExchangeHelper { get; set; }
 
+        /// <summary>
+        /// The index.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         public virtual ActionResult Index()
         {
             return View();
         }
 
+        /// <summary>
+        /// The get emails.
+        /// </summary>
+        /// <param name="emailStringCatalog">
+        /// The email String Catalog.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         [HttpGet]
-        public string GetEmails(string eStringCatalog)
+        public string GetEmails(string emailStringCatalog)
         {
-            EmailCatalog eCatalog;
+            EmailCatalog emailCatalog;
 
-            switch (eStringCatalog)
+            switch (emailStringCatalog)
             {
                 case "Inbox":
-                    eCatalog = EmailCatalog.Inbox;
+                    emailCatalog = EmailCatalog.Inbox;
                     break;
                 case "SentItems":
-                    eCatalog = EmailCatalog.SentItems;
+                    emailCatalog = EmailCatalog.SentItems;
                     break;
                 case "DeletedItems":
-                    eCatalog = EmailCatalog.DeletedItems;
+                    emailCatalog = EmailCatalog.DeletedItems;
                     break;
                 case "Drafts":
-                    eCatalog = EmailCatalog.Drafts;
+                    emailCatalog = EmailCatalog.Drafts;
                     break;
                 default:
-                    eCatalog = EmailCatalog.Inbox;
+                    emailCatalog = EmailCatalog.Inbox;
                     break;
             }
 
-            return MSExchangeHelper.GetEmails(eCatalog);
+            return MSExchangeHelper.GetEmails(emailCatalog);
         }
 
         /// <summary>
         /// Gets the body email by identifier.
         /// </summary>
-        /// <param name="Id">The identifier.</param>
-        /// <param name="eStringCatalog">The e string catalog.</param>
-        /// <returns></returns>
+        /// <param name="id">
+        /// The identifier.
+        /// </param>
+        /// <param name="emailStringCatalog">
+        /// The email String Catalog.
+        /// </param>
+        /// <returns>
+        /// </returns>
         [HttpGet]
         [ValidateInput(false)]
-        public string GetBodyEmailById(string Id, string eStringCatalog)
+        public string GetBodyEmailById(string id, string emailStringCatalog)
         {
-            var result = MSExchangeHelper.GetBodyEmailById(Id, eStringCatalog);
+            var result = MSExchangeHelper.GetBodyEmailById(id, emailStringCatalog);
 
             return result;
         }
@@ -80,8 +110,6 @@ namespace MyClientForMSExchange.Controllers
         /// <returns></returns>
         public virtual ActionResult SentItems()
         {
-            //var subList = MSExchangeHelper.GetMailsSent(EmailCatalog.SentItems);
-            //return View(subList);
             return this.View();
         }
 
@@ -100,8 +128,6 @@ namespace MyClientForMSExchange.Controllers
         /// <returns></returns>
         public virtual ActionResult Drafts()
         {
-            //var subList = MSExchangeHelper.GetMailsDrafts(EmailCatalog.Inbox);
-            //return View(subList);
             return this.View();
         }
 
@@ -126,12 +152,11 @@ namespace MyClientForMSExchange.Controllers
             if (ModelState.IsValid)
             {
                 if (MSExchangeHelper.NewEmail(emailModel))
-                return RedirectToAction(MVC.Home.SentItems());
-                else
                 {
-                    ViewBag.message = "Message is unsent";
-                    ModelState.AddModelError(String.Empty, "The e-mail is unsent");
+                    return RedirectToAction(MVC.Home.SentItems());
                 }
+
+                this.ModelState.AddModelError(string.Empty, "The e-mail is unsent");
             }
             
             return View(emailModel);
@@ -153,7 +178,7 @@ namespace MyClientForMSExchange.Controllers
         /// <param name="emailSubject">The email subject.</param>
         /// <returns></returns>
         [HttpPost]
-        public virtual ActionResult DeleteEmail(Enteties.EmailSubject emailSubject)
+        public virtual ActionResult DeleteEmail(EmailSubject emailSubject)
         {
             MSExchangeHelper.DeleteEmail(emailSubject.Subject, emailSubject.Date);
 
@@ -163,14 +188,19 @@ namespace MyClientForMSExchange.Controllers
         /// <summary>
         /// Deletes the email by identifier.
         /// </summary>
-        /// <param name="Id">The identifier.</param>
-        /// <param name="eStringCatalog">The e string catalog.</param>
-        /// <returns></returns>
+        /// <param name="id">
+        /// The identifier.
+        /// </param>
+        /// <param name="emailStringCatalog">
+        /// The email String Catalog.
+        /// </param>
+        /// <returns>
+        /// </returns>
         [HttpGet]
         [ValidateInput(false)]
-        public virtual ActionResult DeleteEmailById(string Id, string eStringCatalog)
+        public virtual ActionResult DeleteEmailById(string id, string emailStringCatalog)
         {
-            MSExchangeHelper.DeleteEmailById(Id, eStringCatalog);
+            MSExchangeHelper.DeleteEmailById(id, emailStringCatalog);
 
             return RedirectToAction(MVC.Home.DeletedItems());
         }

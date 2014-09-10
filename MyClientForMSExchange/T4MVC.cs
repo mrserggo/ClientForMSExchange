@@ -27,7 +27,6 @@ public static partial class MVC
 {
     public static MyClientForMSExchange.Controllers.AccountController Account = new MyClientForMSExchange.Controllers.T4MVC_AccountController();
     public static MyClientForMSExchange.Controllers.HomeController Home = new MyClientForMSExchange.Controllers.T4MVC_HomeController();
-    public static MyClientForMSExchange.Controllers.ManageController Manage = new MyClientForMSExchange.Controllers.T4MVC_ManageController();
     public static T4MVC.SharedController Shared = new T4MVC.SharedController();
 }
 
@@ -73,6 +72,7 @@ namespace Links
         public static readonly string _references_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/_references.min.js") ? Url("_references.min.js") : Url("_references.js");
         public static readonly string bootstrap_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/bootstrap.min.js") ? Url("bootstrap.min.js") : Url("bootstrap.js");
         public static readonly string bootstrap_min_js = Url("bootstrap.min.js");
+        public static readonly string custom_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/custom.min.js") ? Url("custom.min.js") : Url("custom.js");
         public static readonly string jquery_1_10_2_vsdoc_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/jquery-1.10.2-vsdoc.min.js") ? Url("jquery-1.10.2-vsdoc.min.js") : Url("jquery-1.10.2-vsdoc.js");
         public static readonly string jquery_1_10_2_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/jquery-1.10.2.min.js") ? Url("jquery-1.10.2.min.js") : Url("jquery-1.10.2.js");
         public static readonly string jquery_1_10_2_min_js = Url("jquery-1.10.2.min.js");
@@ -83,7 +83,6 @@ namespace Links
         public static readonly string jquery_validate_unobtrusive_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/jquery.validate.unobtrusive.min.js") ? Url("jquery.validate.unobtrusive.min.js") : Url("jquery.validate.unobtrusive.js");
         public static readonly string jquery_validate_unobtrusive_min_js = Url("jquery.validate.unobtrusive.min.js");
         public static readonly string modernizr_2_6_2_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/modernizr-2.6.2.min.js") ? Url("modernizr-2.6.2.min.js") : Url("modernizr-2.6.2.js");
-        public static readonly string MyJS_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/MyJS.min.js") ? Url("MyJS.min.js") : Url("MyJS.js");
         public static readonly string respond_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/respond.min.js") ? Url("respond.min.js") : Url("respond.js");
         public static readonly string respond_min_js = Url("respond.min.js");
     }
@@ -96,7 +95,7 @@ namespace Links
         public static readonly string bootstrap_css = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/bootstrap.min.css") ? Url("bootstrap.min.css") : Url("bootstrap.css");
              
         public static readonly string bootstrap_min_css = Url("bootstrap.min.css");
-        public static readonly string MyStyles_css = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/MyStyles.min.css") ? Url("MyStyles.min.css") : Url("MyStyles.css");
+        public static readonly string CustomStyles_css = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/CustomStyles.min.css") ? Url("CustomStyles.min.css") : Url("CustomStyles.css");
              
         public static readonly string Site_css = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/Site.min.css") ? Url("Site.min.css") : Url("Site.css");
              

@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "NewEmail";
 }
-@model MyClientForMSExchange.Models.Entities.Email
+@model Core.EntityFrameworkDAL.Entities.Email
 
 @using (Html.BeginForm(MVC.Home.NewEmail(), FormMethod.Post))
 {
@@ -40,10 +40,10 @@
 
             <tr>
                 <td>&nbsp;</td>
-                <td class="check-box">
+                <td>
                     <table>
                         <tr>
-                            <td class="log-btn" colspan="2">
+                            <td colspan="2">
                                 <input class="btn btn-default" type="submit" value="Send E-mail" />
                             </td>
                         </tr>
