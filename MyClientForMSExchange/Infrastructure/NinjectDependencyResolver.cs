@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace MyClientForMSExchange.Infrastructure
+﻿namespace MyClientForMSExchange.Infrastructure
 {
+    using System;
+    using System.Collections.Generic;
     using System.Web.Mvc;
-
     using MyClientForMSExchange.Helpers;
-
     using Ninject;
 
     public class NinjectDependencyResolver : IDependencyResolver

@@ -8,6 +8,8 @@ namespace MyClientForMSExchange.Repositories.Interfaces
     using System.Data.Entity;
     using System.Linq.Expressions;
 
+    using Core.EntityFrameworkDAL.Repositories.Interfaces;
+
     public class Repository<T> : IRepository<T> where T : class
     {
         protected DbSet<T> DbSet;

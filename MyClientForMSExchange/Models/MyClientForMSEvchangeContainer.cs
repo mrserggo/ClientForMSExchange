@@ -1,21 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace MyClientForMSExchange.Models
+﻿namespace MyClientForMSExchange.Models
 {
     using System.Data.Entity;
 
     using MyClientForMSExchange.Models.Entities;
 
-    public class MyClientForMSEvchangeContainer : DbContext
+    /// <summary>
+    /// The my client for ms evchange container.
+    /// </summary>
+    // ReSharper disable once InconsistentNaming
+    public class MyClientForMSExchangeContainer : DbContext
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="MyClientForMSEvchangeContainer"/> class.
+        /// Initializes a new instance of the <see cref="MyClientForMSExchangeContainer"/> class.
         /// </summary>
-        public MyClientForMSEvchangeContainer() : base("name=MyConnection") { }
+        public MyClientForMSExchangeContainer()
+            : base("name=MyConnection")
+        {
+        }
 
+        /// <summary>
+        /// Gets or sets the clients.
+        /// </summary>
+        /// <value>
+        /// The clients.
+        /// </value>
         public DbSet<Client> Clients { get; set; }
     }
 }

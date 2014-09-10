@@ -102,8 +102,6 @@ namespace MyClientForMSExchange.Helpers
                 byte[] bytes = Convert.FromBase64String(cipherText);
                 using (MemoryStream msDecrypt = new MemoryStream(bytes))
                 {
-                    // Create a RijndaelManaged object
-                    // with the specified key and IV.
                     aesAlg = new RijndaelManaged();
                     aesAlg.Key = key.GetBytes(aesAlg.KeySize / 8);
                     // Get the initialization vector from the encrypted stream

@@ -1,9 +1,16 @@
-﻿using System;
-
-namespace MyClientForMSExchange.Repositories.Interfaces
+﻿namespace Core.EntityFrameworkDAL.Repositories.Interfaces
 {
+    /// <summary>
+    /// test
+    /// </summary>
     public interface IEntity
     {
-        Int64 Id { get; set; } 
+        /// <summary>
+        /// Gets or sets the identifier.
+        /// </summary>
+        /// <value>
+        /// The identifier.
+        /// </value>
+        long Id { get; set; } 
     }
 }

@@ -8,9 +8,15 @@ namespace MyClient.Core.Enums
 {
     public enum EmailCatalog
     {
+        /// <summary>
+        /// The inbox
+        /// </summary>
         Inbox,
+
         SentItems,
+
         DeletedItems,
+
         Drafts
     }
 }

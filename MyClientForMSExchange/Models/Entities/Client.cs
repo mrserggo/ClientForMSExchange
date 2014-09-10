@@ -8,6 +8,8 @@ namespace MyClientForMSExchange.Models.Entities
 {
     using System.ComponentModel.DataAnnotations;
 
+    using Core.EntityFrameworkDAL.Repositories.Interfaces;
+
     public class Client : IEntity
     {
         #region Properties

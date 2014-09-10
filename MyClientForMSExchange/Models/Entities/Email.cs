@@ -7,6 +7,8 @@ namespace MyClientForMSExchange.Models.Entities
 {
     using System.ComponentModel.DataAnnotations;
 
+    using Core.EntityFrameworkDAL.Repositories.Interfaces;
+
     using MyClientForMSExchange.Repositories.Interfaces;
 
     public class Email : IEntity

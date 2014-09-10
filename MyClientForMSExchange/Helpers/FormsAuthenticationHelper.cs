@@ -29,7 +29,7 @@ namespace MyClientForMSExchange.Helpers
         /// <returns></returns>
         public Boolean Login(String userEmail, String password, Boolean isPersistent)
         {
-            var rep = new Repository<Client>(new MyClientForMSEvchangeContainer());
+            var rep = new Repository<Client>(new MyClientForMSExchangeContainer());
             Client client = rep.SearchFor(p => p.Email == userEmail).SingleOrDefault();
 
             if ((client != null) && (MyCryptoHelper.DecryptStringAES(client.Password, ConfigurationManager.AppSettings["KeyForAESCrypto"]) == password))
@@ -111,7 +111,7 @@ namespace MyClientForMSExchange.Helpers
                                 }
                                 else
                                 {
-                                    var rep = new Repository<Client>(new MyClientForMSEvchangeContainer());
+                                    var rep = new Repository<Client>(new MyClientForMSExchangeContainer());
                                     var client = rep.SearchFor(p => p.Email == formsAuthenticationTicket.Name).SingleOrDefault();
 
                                     HttpContext.Current.Session["authsession"] = client;

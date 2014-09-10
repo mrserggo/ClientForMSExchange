@@ -19,7 +19,6 @@ namespace MyClientForMSExchange.Helpers
 
         List<Enteties.EmailSubject> DeleteEmail(string emailSubject, string dateCreation);
 
-
         string GetEmails(EmailCatalog eCatalog);
 
         List<Enteties.EmailSubject> GetMailsSent(EmailCatalog enumCatalog);

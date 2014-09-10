@@ -1,15 +1,15 @@
-﻿using System;
-using System.Web.Mvc;
-using MyClientForMSExchange.Models;
-using MyClientForMSExchange.Helpers;
-using Ninject;
-
-namespace MyClientForMSExchange.Controllers
+﻿namespace MyClientForMSExchange.Controllers
 {
-    
+    using System;
+    using System.Web.Mvc;
+
+    using MyClientForMSExchange.Helpers;
+    using MyClientForMSExchange.Models;
+
+    using Ninject;
+
     public partial class AccountController : Controller
     {
-
         [Inject]
         public IAuthenticationHelper FormsAuthenticationHelper { get; set; }
 
@@ -53,10 +53,8 @@ namespace MyClientForMSExchange.Controllers
                         }
                         return RedirectToAction(MVC.Home.Index());
                     }
-                    else
-                    {
-                        ModelState.AddModelError(String.Empty, "Login or password is uncorrect");
-                    }
+                    
+                    ModelState.AddModelError(String.Empty, "Login or password is uncorrect");
                 }
                 else
                 {
@@ -68,7 +66,5 @@ namespace MyClientForMSExchange.Controllers
 
             return View(loginModel);
         }
-
-
     }
 }

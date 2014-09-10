@@ -19,8 +19,6 @@ namespace MyClientForMSExchange.Controllers
 
         public virtual ActionResult Index()
         {
-            //var subList = MSExchangeHelper.GetMailsInbox(EmailCatalog.Inbox);
-            //return View(subList);
             return View();
         }
 
@@ -28,6 +26,7 @@ namespace MyClientForMSExchange.Controllers
         public string GetEmails(string eStringCatalog)
         {
             EmailCatalog eCatalog;
+
             switch (eStringCatalog)
             {
                 case "Inbox":
@@ -46,6 +45,7 @@ namespace MyClientForMSExchange.Controllers
                     eCatalog = EmailCatalog.Inbox;
                     break;
             }
+
             return MSExchangeHelper.GetEmails(eCatalog);
         }
 
@@ -60,6 +60,7 @@ namespace MyClientForMSExchange.Controllers
         public string GetBodyEmailById(string Id, string eStringCatalog)
         {
             var result = MSExchangeHelper.GetBodyEmailById(Id, eStringCatalog);
+
             return result;
         }
 
@@ -90,8 +91,6 @@ namespace MyClientForMSExchange.Controllers
         /// <returns></returns>
         public virtual ActionResult DeletedItems()
         {
-            //var subList = MSExchangeHelper.GetMailsDeleted(EmailCatalog.DeletedItems);
-            //return View(subList);
             return this.View();
         }
 
@@ -157,6 +156,7 @@ namespace MyClientForMSExchange.Controllers
         public virtual ActionResult DeleteEmail(Enteties.EmailSubject emailSubject)
         {
             MSExchangeHelper.DeleteEmail(emailSubject.Subject, emailSubject.Date);
+
             return RedirectToAction(MVC.Home.DeletedItems());
         }
 
@@ -171,6 +171,7 @@ namespace MyClientForMSExchange.Controllers
         public virtual ActionResult DeleteEmailById(string Id, string eStringCatalog)
         {
             MSExchangeHelper.DeleteEmailById(Id, eStringCatalog);
+
             return RedirectToAction(MVC.Home.DeletedItems());
         }
     }

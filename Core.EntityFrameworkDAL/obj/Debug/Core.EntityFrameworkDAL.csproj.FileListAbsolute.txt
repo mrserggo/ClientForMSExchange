@@ -7,3 +7,4 @@ D:\Projects\Test\MyClientForMSExchange\Core.EntityFrameworkDAL\bin\Debug\EntityF
 D:\Projects\Test\MyClientForMSExchange\Core.EntityFrameworkDAL\bin\Debug\EntityFramework.SqlServer.dll
 D:\Projects\Test\MyClientForMSExchange\Core.EntityFrameworkDAL\bin\Debug\EntityFramework.xml
 D:\Projects\Test\MyClientForMSExchange\Core.EntityFrameworkDAL\bin\Debug\EntityFramework.SqlServer.xml
+D:\Projects\Test\MyClientForMSExchange\Core.EntityFrameworkDAL\obj\Debug\Core.EntityFrameworkDAL.csprojResolveAssemblyReference.cache

@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Configuration;
-using System.Text;
-using Microsoft.Exchange.WebServices.Data;
-using MyClient.Core.Enums;
-using MyClientForMSExchange.Models;
-using MyClientForMSExchange.Models.Entities;
-using MyClientForMSExchange.Repositories.Interfaces;
-using Newtonsoft.Json;
-using MyClientForMSExchange.Helpers;
-
-using Ninject;
-
-namespace MyClientForMSExchange.Helpers
+﻿namespace MyClientForMSExchange.Helpers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Globalization;
+    using System.Linq;
+    using System.Text;
+    using Microsoft.Exchange.WebServices.Data;
+    using MyClient.Core.Enums;
+    using MyClientForMSExchange.Models;
+    using MyClientForMSExchange.Models.Entities;
+    using MyClientForMSExchange.Repositories.Interfaces;
+    using Newtonsoft.Json;
 
     public class MSExchangeHelper : IMSExchangeHelper
     {
@@ -30,22 +26,21 @@ namespace MyClientForMSExchange.Helpers
         /// <returns></returns>
         public List<Enteties.EmailSubject> GetMailsInbox(EmailCatalog enumCatalog)
         {
-            ExchangeService _service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
+            var service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
             var client = FormsAuthenticationHelper.CurrentClient;
             var subList = new List<Enteties.EmailSubject>();
             if (client != null)
             {
-                _service.Credentials = new WebCredentials(client.Email.Split('@')[0], MyCryptoHelper.DecryptStringAES(client.Password, ConfigurationManager.AppSettings["KeyForAESCrypto"]));
-                _service.AutodiscoverUrl(client.Email);
+                service.Credentials = new WebCredentials(client.Email.Split('@')[0], MyCryptoHelper.DecryptStringAES(client.Password, ConfigurationManager.AppSettings["KeyForAESCrypto"]));
+                service.AutodiscoverUrl(client.Email);
 
                 try
                 {
-                    FindItemsResults<Item> findResults = _service.FindItems(WellKnownFolderName.Inbox, new ItemView(int.MaxValue));
+                    FindItemsResults<Item> findResults = service.FindItems(WellKnownFolderName.Inbox, new ItemView(int.MaxValue));
 
-                    foreach (EmailMessage email in _service.FindItems(WellKnownFolderName.Inbox, new ItemView(int.MaxValue)))
+                    foreach (EmailMessage email in service.FindItems(WellKnownFolderName.Inbox, new ItemView(int.MaxValue)))
                     {
-
-                        subList.Add(new Enteties.EmailSubject() {Subject = email.Subject, Date = email.DateTimeCreated.ToString()});
+                        subList.Add(new Enteties.EmailSubject() {Subject = email.Subject, Date = email.DateTimeCreated.ToString(CultureInfo.InvariantCulture)});
                     }
                 }
                 catch (Exception ex)
@@ -87,6 +82,7 @@ namespace MyClientForMSExchange.Helpers
                     //
                 }
             }
+
             return subList;
         }
 
@@ -142,6 +138,7 @@ namespace MyClientForMSExchange.Helpers
                     //
                 }
             }
+
             return String.Format(format, sb.ToString());
         }
 
@@ -362,7 +359,7 @@ namespace MyClientForMSExchange.Helpers
                 _service.Credentials = new WebCredentials(userName[0], loginModel.Password);
                 _service.AutodiscoverUrl(loginModel.Email);
 
-                var rep = new Repository<Client>(new MyClientForMSEvchangeContainer());
+                var rep = new Repository<Client>(new MyClientForMSExchangeContainer());
                 var client = rep.SearchFor(x => x.Email == loginModel.Email).SingleOrDefault();
                 if (client != null)
                 {

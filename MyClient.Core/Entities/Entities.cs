@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyClient.Core.Enums
+﻿namespace MyClient.Core.Enums
 {
     public class Enteties
     {
         public class EmailSubject
         {
             public string Subject { get; set; }
+
             public string Date { get; set; }
         }
 
@@ -24,7 +19,9 @@ namespace MyClient.Core.Enums
         public class MailItem
         {
             public string Id { get; set; }
+
             public string From;
+
             public string[] Recipients;
             public string Subject;
             public string Body;
