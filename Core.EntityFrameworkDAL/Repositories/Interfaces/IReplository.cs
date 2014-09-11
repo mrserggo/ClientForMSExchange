@@ -55,7 +55,7 @@
         /// <returns>
         /// The <see cref="T"/>.
         /// </returns>
-        T GetById(int id);
+        T GetById(long id);
 
         /// <summary>
         /// The save.

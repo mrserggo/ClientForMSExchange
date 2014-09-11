@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Configuration;
-    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Linq;
     using System.Text;
@@ -43,6 +42,12 @@
         public IRepository<Client> RepositoryClients { get; set; }
 
         /// <summary>
+        /// Gets or sets the forms authentication helper.
+        /// </summary>
+        [Inject]
+        public IAuthenticationHelper FormsAuthenticationHelper { get; set; }
+
+        /// <summary>
         /// Gets the mails inbox.
         /// </summary>
         /// <param name="enumCatalog">The enum catalog.</param>
@@ -50,7 +55,7 @@
         public List<EmailSubject> GetMailsInbox(EmailCatalog enumCatalog)
         {
             var service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
-            var client = FormsAuthenticationHelper.CurrentClient;
+            var client = this.FormsAuthenticationHelper.CurrentClient;
             var subList = new List<EmailSubject>();
             if (client != null)
             {
@@ -80,7 +85,7 @@
         public List<EmailSubject> DeleteEmail(string emailSubject, string dateCreation)
         {
             var service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
-            var client = FormsAuthenticationHelper.CurrentClient;
+            var client = this.FormsAuthenticationHelper.CurrentClient;
             var subList = new List<EmailSubject>();
             if (client != null)
             {
@@ -112,12 +117,11 @@
         /// </param>
         /// <returns>
         /// </returns>
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:UseBuiltInTypeAlias", Justification = "Reviewed. Suppression is OK here.")]
         public string GetEmails(EmailCatalog emailCatalog)
         {
             var sb = new StringBuilder();
             var service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
-            var client = FormsAuthenticationHelper.CurrentClient;
+            var client = this.FormsAuthenticationHelper.CurrentClient;
 
             if (client != null)
             {
@@ -151,7 +155,7 @@
                             break;
                     }
 
-                    var clientId = FormsAuthenticationHelper.CurrentClient.Id;
+                    var clientId = this.FormsAuthenticationHelper.CurrentClient.Id;
                     var catalogId =
                         this.RepositoryCatalogs.SearchFor(x => x.CatalogName == emailCatalog.ToString())
                             .Select(x => x.CatalogId)
@@ -186,6 +190,9 @@
                         }
                     }
 
+                    // var allEmailsInCatalog = this.RepositoryClients.GetById(clientId).EmailItems
+                    // .Where(emailItem => emailItem.CatalogId == catalogId)
+                    // .OrderByDescending(element => element.CreationDate);
                     var allEmailsInCatalog =
                         this.RepositoryEmailItems.GetAll().Where(element => element.CatalogId == catalogId && element.ClientId == clientId).OrderByDescending(element => element.CreationDate);
 
@@ -211,7 +218,7 @@
                 }
             }
 
-            return String.Format(Constants.FormatJson, sb);
+            return string.Format(Constants.FormatJson, sb);
         }
 
         /// <summary>
@@ -222,7 +229,7 @@
         public List<EmailSubject> GetMailsSent(EmailCatalog enumCatalog)
         {
             var service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
-            var client = FormsAuthenticationHelper.CurrentClient;
+            var client = this.FormsAuthenticationHelper.CurrentClient;
             var subList = new List<EmailSubject>();
             if (client != null)
             {
@@ -251,7 +258,7 @@
         public List<EmailSubject> GetMailsDeleted(EmailCatalog enumCatalog)
         {
             var service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
-            var client = FormsAuthenticationHelper.CurrentClient;
+            var client = this.FormsAuthenticationHelper.CurrentClient;
             var subList = new List<EmailSubject>();
             if (client != null)
             {
@@ -280,7 +287,7 @@
         public List<string> GetMailsDrafts(EmailCatalog enumCatalog)
         {
             var service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
-            var client = FormsAuthenticationHelper.CurrentClient;
+            var client = this.FormsAuthenticationHelper.CurrentClient;
             var subList = new List<string>();
             if (client != null)
             {
@@ -343,7 +350,7 @@
             // this.RepositoryClients.GetById((int)FormsAuthenticationHelper.CurrentClient.Id)
             // .EmailItems.Where(item => item.InternetMessageId == id && item.CatalogId == catalogId)
             // .Select(x => x.Body).SingleOrDefault();
-            var clientId = FormsAuthenticationHelper.CurrentClient.Id;
+            var clientId = this.FormsAuthenticationHelper.CurrentClient.Id;
 
             var body =
                 this.RepositoryEmailItems.SearchFor(item => item.InternetMessageId == id 
@@ -362,7 +369,7 @@
         public bool NewEmail(Email emailModel)
         {
             var service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
-            var client = FormsAuthenticationHelper.CurrentClient;
+            var client = this.FormsAuthenticationHelper.CurrentClient;
 
             if (client != null)
             {
@@ -465,7 +472,7 @@
             }
 
             var service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
-            var client = FormsAuthenticationHelper.CurrentClient;
+            var client = this.FormsAuthenticationHelper.CurrentClient;
 
             if (client != null)
             {
@@ -518,7 +525,8 @@
 
                             var emailForDeleting = this.RepositoryEmailItems.SearchFor(
                                 emailDeleting => emailDeleting.InternetMessageId == id 
-                                    && emailDeleting.CatalogId == catalogId).SingleOrDefault();
+                                    && emailDeleting.CatalogId == catalogId
+                                    && emailDeleting.ClientId == client.Id).SingleOrDefault();
 
                             this.RepositoryEmailItems.Delete(emailForDeleting);
                             this.RepositoryEmailItems.Save();

@@ -9,7 +9,9 @@
     //});
 
     //get mails for current catalog
+
     LoadEmails();
+
 
 });
 
@@ -27,6 +29,8 @@ function GetSelectedEmail(id) {
 function LoadEmails() {
 
     var activeCatalog = $('.active').children().first().text();
+    $('#deleteBtn').attr("disabled", "disabled");
+    $('#newEmailButton').attr("disabled", "disabled");
 
     $.get('GetEmails?emailStringCatalog=' + activeCatalog,
         null,
@@ -52,6 +56,9 @@ function LoadEmails() {
 
                 $('#listTitles').append(elem);
             }
+
+            $('#deleteBtn').removeAttr("disabled");
+            $('#newEmailButton').removeAttr("disabled");
 
             var firstEmailSubject = $('.title_div').first();
             firstEmailSubject.addClass("selected");

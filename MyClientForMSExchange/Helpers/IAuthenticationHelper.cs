@@ -1,6 +1,10 @@
 ﻿namespace MyClientForMSExchange.Helpers
 {
+    using System.Data.Entity.Core.Metadata.Edm;
+
     using Core.EntityFrameworkDAL.Entities;
+
+    using Microsoft.Exchange.WebServices.Autodiscover;
 
     /// <summary>
     /// The AuthenticationHelper interface.
@@ -45,6 +49,12 @@
         /// <param name="user">The user.</param>
         /// <param name="isPersistent">The is persistent.</param>
         void CreateCookie(Client user, bool isPersistent);
+
+        /// <summary>
+        /// Currents the client.
+        /// </summary>
+        /// <returns></returns>
+        Client CurrentClient { get; }
 
         #endregion
     }

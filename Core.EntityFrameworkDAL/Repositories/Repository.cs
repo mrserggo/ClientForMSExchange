@@ -94,7 +94,7 @@
         /// <returns>
         /// The <see cref="T"/>.
         /// </returns>
-        public T GetById(int id)
+        public T GetById(long id)
         {
             return this.DbSet.Find(id);
         }

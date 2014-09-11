@@ -6,11 +6,7 @@
     using System.Web;
     using System.Web.Security;
     using Core.EntityFrameworkDAL.Entities;
-    using Core.EntityFrameworkDAL.Repositories;
     using Core.EntityFrameworkDAL.Repositories.Interfaces;
-
-    using MyClientForMSExchange.Models;
-
     using Ninject;
 
     /// <summary>
@@ -103,7 +99,7 @@
         /// <value>
         /// The current client.
         /// </value>
-        public static Client CurrentClient
+        public Client CurrentClient
         {
             get
             {
@@ -129,8 +125,8 @@
                                 }
                                 else
                                 {
-                                     var rep = new Repository<Client>(new MyClientForMSExchangeContainer());
-                                     var client = rep.SearchFor(p => p.Email == formsAuthenticationTicket.Name).SingleOrDefault();
+                                     // var rep = new Repository<Client>(new MyClientForMSExchangeContainer());
+                                    var client = this.RepositoryClients.SearchFor(p => p.Email == formsAuthenticationTicket.Name).SingleOrDefault();
 
                                     HttpContext.Current.Session["authsession"] = client;
                                 }
