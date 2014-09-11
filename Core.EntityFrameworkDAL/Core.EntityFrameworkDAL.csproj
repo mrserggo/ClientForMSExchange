@@ -46,8 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants\Constants.cs" />
+    <Compile Include="Entities\Catalog.cs" />
     <Compile Include="Entities\Client.cs" />
     <Compile Include="Entities\Email.cs" />
+    <Compile Include="Entities\EmailItem.cs" />
     <Compile Include="Entities\EmailSubject.cs" />
     <Compile Include="Entities\MailItem.cs" />
     <Compile Include="Entities\SubjectWithId.cs" />

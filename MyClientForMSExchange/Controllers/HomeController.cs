@@ -2,11 +2,10 @@
 {
     using System.Web.Mvc;
 
+    using Core.EntityFrameworkDAL.Constants;
     using Core.EntityFrameworkDAL.Entities;
     using Core.EntityFrameworkDAL.Enums;
-
     using MyClientForMSExchange.Helpers;
-
     using Ninject;
 
     /// <summary>
@@ -156,7 +155,7 @@
                     return RedirectToAction(MVC.Home.SentItems());
                 }
 
-                this.ModelState.AddModelError(string.Empty, "The e-mail is unsent");
+                this.ModelState.AddModelError(string.Empty, Constants.TheEmailisUnsentErrorMessage);
             }
             
             return View(emailModel);

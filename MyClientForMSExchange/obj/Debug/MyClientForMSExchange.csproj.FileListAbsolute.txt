@@ -126,3 +126,6 @@ d:\Projects\MyClientForMSExchange\MyClientForMSExchange\bin\Microsoft.Owin.Secur
 d:\Projects\MyClientForMSExchange\MyClientForMSExchange\obj\Debug\MyClientForMSExchange.csprojResolveAssemblyReference.cache
 d:\Projects\MyClientForMSExchange\MyClientForMSExchange\obj\Debug\MyClientForMSExchange.dll
 d:\Projects\MyClientForMSExchange\MyClientForMSExchange\obj\Debug\MyClientForMSExchange.pdb
+D:\Projects\MyClientForMSExchange\MyClientForMSExchange\obj\Debug\MyClientForMSExchange.Migrations.InitialCreate.resources
+D:\Projects\MyClientForMSExchange\MyClientForMSExchange\obj\Debug\MyClientForMSExchange.csproj.GenerateResource.Cache
+D:\Projects\MyClientForMSExchange\MyClientForMSExchange\obj\Debug\MyClientForMSExchange.Migrations.AddedTablesforMSExchange.resources

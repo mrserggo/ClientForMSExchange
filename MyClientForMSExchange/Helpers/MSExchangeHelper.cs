@@ -7,22 +7,41 @@
     using System.Globalization;
     using System.Linq;
     using System.Text;
-
+    using Core.EntityFrameworkDAL.Constants;
     using Core.EntityFrameworkDAL.Entities;
     using Core.EntityFrameworkDAL.Enums;
-    using Core.EntityFrameworkDAL.Repositories;
     using Core.EntityFrameworkDAL.Repositories.Interfaces;
     using Microsoft.Exchange.WebServices.Data;
-
     using MyClientForMSExchange.Models;
-
     using Newtonsoft.Json;
+    using Ninject;
 
     /// <summary>
     /// The ms exchange helper.
     /// </summary>
     public class MSExchangeHelper : IMSExchangeHelper
     {
+        /// <summary>
+        /// The rempository catalog
+        /// </summary>
+        [Inject]
+        public IRepository<Catalog> RepositoryCatalogs { get; set; }
+
+        /// <summary>
+        /// Gets or sets the repository email items.
+        /// </summary>
+        [Inject]
+        public IRepository<EmailItem> RepositoryEmailItems { get; set; }
+
+        /// <summary>
+        /// Gets or sets the repository clients.
+        /// </summary>
+        /// <value>
+        /// The repository clients.
+        /// </value>
+        [Inject]
+        public IRepository<Client> RepositoryClients { get; set; }
+
         /// <summary>
         /// Gets the mails inbox.
         /// </summary>
@@ -35,7 +54,11 @@
             var subList = new List<EmailSubject>();
             if (client != null)
             {
-                service.Credentials = new WebCredentials(client.Email.Split('@')[0], MyCryptoHelper.DecryptStringAES(client.Password, ConfigurationManager.AppSettings["KeyForAESCrypto"]));
+                service.Credentials = new WebCredentials(
+                    client.Email.Split('@')[0],
+                    MyCryptoHelper.DecryptStringAES(
+                        client.Password,
+                        ConfigurationManager.AppSettings["KeyForAESCrypto"]));
                 service.AutodiscoverUrl(client.Email);
 
                 foreach (var item in service.FindItems(WellKnownFolderName.Inbox, new ItemView(int.MaxValue)))
@@ -61,14 +84,17 @@
             var subList = new List<EmailSubject>();
             if (client != null)
             {
-                service.Credentials = new WebCredentials(client.Email.Split('@')[0], MyCryptoHelper.DecryptStringAES(client.Password, ConfigurationManager.AppSettings["KeyForAESCrypto"]));
+                service.Credentials = new WebCredentials(
+                    client.Email.Split('@')[0],
+                    MyCryptoHelper.DecryptStringAES(
+                        client.Password,
+                        ConfigurationManager.AppSettings["KeyForAESCrypto"]));
                 service.AutodiscoverUrl(client.Email);
 
                 foreach (var item in service.FindItems(WellKnownFolderName.Inbox, new ItemView(int.MaxValue)))
                 {
                     var email = (EmailMessage)item;
-                    // ReSharper disable once SpecifyACultureInStringConversionExplicitly
-                    if ((email.Subject == emailSubject) && (email.DateTimeCreated.ToString() == dateCreation))
+                    if ((email.Subject == emailSubject) && (email.DateTimeCreated.ToString(CultureInfo.InvariantCulture) == dateCreation))
                     {
                         email.Delete(DeleteMode.MoveToDeletedItems);
                     }
@@ -89,26 +115,29 @@
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:UseBuiltInTypeAlias", Justification = "Reviewed. Suppression is OK here.")]
         public string GetEmails(EmailCatalog emailCatalog)
         {
-            StringBuilder sb = new StringBuilder();
-            string format = @"[ {0} ]";
+            var sb = new StringBuilder();
             var service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
             var client = FormsAuthenticationHelper.CurrentClient;
 
             if (client != null)
             {
-                service.Credentials = new WebCredentials(client.Email.Split('@')[0], MyCryptoHelper.DecryptStringAES(client.Password, ConfigurationManager.AppSettings["KeyForAESCrypto"]));
+                service.Credentials = new WebCredentials(
+                    client.Email.Split('@')[0],
+                    MyCryptoHelper.DecryptStringAES(
+                        client.Password,
+                        ConfigurationManager.AppSettings["KeyForAESCrypto"]));
                 service.AutodiscoverUrl(client.Email);
-
-                FindItemsResults<Item> emails;
 
                 try
                 {
+                    FindItemsResults<Item> emails;
                     switch (emailCatalog)
                     {
                         case EmailCatalog.Inbox:
+
                             emails = service.FindItems(WellKnownFolderName.Inbox, new ItemView(int.MaxValue));
                             break;
-                        case EmailCatalog.SentItems: 
+                        case EmailCatalog.SentItems:
                             emails = service.FindItems(WellKnownFolderName.SentItems, new ItemView(int.MaxValue));
                             break;
                         case EmailCatalog.DeletedItems:
@@ -122,10 +151,52 @@
                             break;
                     }
 
-                    foreach (var item in emails)
+                    var catalogId =
+                        this.RepositoryCatalogs.SearchFor(x => x.CatalogName == emailCatalog.ToString())
+                            .Select(x => x.CatalogId)
+                            .SingleOrDefault();
+
+                    var items = service.BindToItems(
+                        emails.Select(item => item.Id),
+                        new PropertySet(BasePropertySet.FirstClassProperties, ItemSchema.Subject, ItemSchema.Body));
+                    var emailItemCollection =
+                        items.Select(
+                            item =>
+                            new EmailItem
+                                {
+                                    Body = item.Item.Body.ToString(),
+                                    CreationDate = item.Item.DateTimeCreated,
+                                    InternetMessageId = ((EmailMessage)item.Item).InternetMessageId,
+                                    Subject = item.Item.Subject,
+                                    CatalogId = catalogId
+                                }).ToList();
+
+                    foreach (var emailItem in emailItemCollection)
                     {
-                        var email = (EmailMessage)item;
-                        var subjectWithId = new SubjectWithId { Subject = email.Subject, Id = email.InternetMessageId, DateCreation = email.DateTimeCreated.ToString(CultureInfo.InvariantCulture) };
+                        // add to db if not exist
+                        EmailItem item = emailItem;
+                        if (
+                            !this.RepositoryEmailItems.SearchFor(
+                                x => x.InternetMessageId == item.InternetMessageId && x.CatalogId == catalogId).Any())
+                        {
+                            this.RepositoryEmailItems.Add(emailItem);
+                            this.RepositoryEmailItems.Save();
+                        }
+                    }
+
+                    var allEmailsInCatalog =
+                        this.RepositoryEmailItems.GetAll().Where(element => element.CatalogId == catalogId).OrderByDescending(element => element.CreationDate);
+
+                    foreach (var item in allEmailsInCatalog)
+                    {
+                        var subjectWithId = new SubjectWithId
+                                                {
+                                                    Subject = item.Subject,
+                                                    Id = item.InternetMessageId,
+                                                    DateCreation =
+                                                        item.CreationDate.ToString(
+                                                            CultureInfo.InvariantCulture)
+                                                };
                         var jsonUser = JsonConvert.SerializeObject(subjectWithId);
                         sb.Append(jsonUser + ",");
                     }
@@ -138,7 +209,7 @@
                 }
             }
 
-            return String.Format(format, sb);
+            return String.Format(Constants.FormatJson, sb);
         }
 
         /// <summary>
@@ -153,7 +224,11 @@
             var subList = new List<EmailSubject>();
             if (client != null)
             {
-                service.Credentials = new WebCredentials(client.Email.Split('@')[0], MyCryptoHelper.DecryptStringAES(client.Password, ConfigurationManager.AppSettings["KeyForAESCrypto"]));
+                service.Credentials = new WebCredentials(
+                    client.Email.Split('@')[0],
+                    MyCryptoHelper.DecryptStringAES(
+                        client.Password,
+                        ConfigurationManager.AppSettings["KeyForAESCrypto"]));
                 service.AutodiscoverUrl(client.Email);
 
                 foreach (var item in service.FindItems(WellKnownFolderName.SentItems, new ItemView(int.MaxValue)))
@@ -178,7 +253,11 @@
             var subList = new List<EmailSubject>();
             if (client != null)
             {
-                service.Credentials = new WebCredentials(client.Email.Split('@')[0], MyCryptoHelper.DecryptStringAES(client.Password, ConfigurationManager.AppSettings["KeyForAESCrypto"]));
+                service.Credentials = new WebCredentials(
+                    client.Email.Split('@')[0],
+                    MyCryptoHelper.DecryptStringAES(
+                        client.Password,
+                        ConfigurationManager.AppSettings["KeyForAESCrypto"]));
                 service.AutodiscoverUrl(client.Email);
 
                 foreach (var item in service.FindItems(WellKnownFolderName.DeletedItems, new ItemView(int.MaxValue)))
@@ -203,22 +282,20 @@
             var subList = new List<string>();
             if (client != null)
             {
-                service.Credentials = new WebCredentials(client.Email.Split('@')[0], MyCryptoHelper.DecryptStringAES(client.Password, ConfigurationManager.AppSettings["KeyForAESCrypto"]));
+                service.Credentials = 
+                    new WebCredentials(
+                        client.Email.Split('@')[0],
+                        MyCryptoHelper.DecryptStringAES(
+                            client.Password,
+                            ConfigurationManager.AppSettings["KeyForAESCrypto"]));
                 service.AutodiscoverUrl(client.Email);
 
-                try
+                foreach (var item in service.FindItems(WellKnownFolderName.Drafts, new ItemView(int.MaxValue)))
                 {
-                    foreach (var item in service.FindItems(WellKnownFolderName.Drafts, new ItemView(int.MaxValue)))
-                    {
-                        var email = (EmailMessage)item;
-                        subList.Add(email.Subject);
-                    }
+                    var email = (EmailMessage)item;
+                    subList.Add(email.Subject);
                 }
-                catch (Exception)
-                {
-                    subList.Add("Error");
-                }
-            }
+        }
 
             return subList;
         }
@@ -256,45 +333,16 @@
                     break;
             }
 
-            var service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
-            var client = FormsAuthenticationHelper.CurrentClient;
+            var catalogId = this.RepositoryCatalogs.SearchFor(x => x.CatalogName == emailCatalog.ToString())
+                .Select(x => x.CatalogId)
+                .SingleOrDefault();
 
-            service.Credentials = new WebCredentials(client.Email.Split('@')[0], MyCryptoHelper.DecryptStringAES(client.Password, ConfigurationManager.AppSettings["KeyForAESCrypto"]));
-            service.AutodiscoverUrl(client.Email);
+            var body =
+                this.RepositoryEmailItems.SearchFor(item => item.InternetMessageId == id && item.CatalogId == catalogId)
+                    .Select(x => x.Body)
+                    .SingleOrDefault();
 
-            FindItemsResults<Item> findResults;
-            switch (emailCatalog)
-            {
-                case EmailCatalog.Inbox:
-                    findResults = service.FindItems(WellKnownFolderName.Inbox, new ItemView(int.MaxValue));
-                    break;
-                case EmailCatalog.SentItems:
-                    findResults = service.FindItems(WellKnownFolderName.SentItems, new ItemView(int.MaxValue));
-                    break;
-                case EmailCatalog.DeletedItems:
-                    findResults = service.FindItems(WellKnownFolderName.DeletedItems, new ItemView(int.MaxValue));
-                    break;
-                case EmailCatalog.Drafts:
-                    findResults = service.FindItems(WellKnownFolderName.Drafts, new ItemView(int.MaxValue));
-                    break;
-                default:
-                    findResults = service.FindItems(WellKnownFolderName.Inbox, new ItemView(int.MaxValue));
-                    break;
-            }
-
-            ServiceResponseCollection<GetItemResponse> items =
-                service.BindToItems(findResults.Select(item => item.Id), new PropertySet(BasePropertySet.FirstClassProperties, ItemSchema.Subject, ItemSchema.Body));
-            var temp = items.Select(
-                item =>
-                    {
-                        return new MailItem
-                                   {
-                                       Id = ((EmailMessage)item.Item).InternetMessageId,
-                                       Body = item.Item.Body.ToString(),
-                                   };
-                    }).ToArray();
-            var y = temp.Where(x => x.Id == id).Select(x => x.Body).SingleOrDefault();
-            return y;
+            return body;
         }
 
         /// <summary>
@@ -309,23 +357,27 @@
 
             if (client != null)
             {
-                service.Credentials = new WebCredentials(client.Email.Split('@')[0], MyCryptoHelper.DecryptStringAES(client.Password, ConfigurationManager.AppSettings["KeyForAESCrypto"]));
+                service.Credentials = new WebCredentials(
+                    client.Email.Split('@')[0],
+                    MyCryptoHelper.DecryptStringAES(
+                        client.Password,
+                        ConfigurationManager.AppSettings["KeyForAESCrypto"]));
                 service.AutodiscoverUrl(client.Email);
 
                 try
                 {
                     // Create and save a folder associated message in the Inbox. 
-                    EmailMessage message = new EmailMessage(service);
-                    message.Subject = emailModel.Subject;
-                    message.Body = emailModel.Body;
+                    var message = new EmailMessage(service)
+                                      {
+                                          Subject = emailModel.Subject, 
+                                          Body = emailModel.Body
+                                      };
+
                     message.ToRecipients.Add(emailModel.EmailOwner);
                     message.SendAndSaveCopy();
                 }
-                catch (Exception ex)
+                catch
                 {
-                    // Write error message to the console window.
-                    Console.WriteLine("Error: " + ex.Message);
-                    Console.ReadLine();
                     return false;
                 }
             }
@@ -340,23 +392,16 @@
         /// <returns></returns>
         public bool Login(LoginModel loginModel)
         {
-            ExchangeService service;
             try
             {
-                service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
+                var service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
                 var userName = loginModel.Email.Split('@');
                 service.Credentials = new WebCredentials(userName[0], loginModel.Password);
                 service.AutodiscoverUrl(loginModel.Email);
-
-                var rep = new Repository<Client>(new MyClientForMSExchangeContainer());
-                var client = rep.SearchFor(x => x.Email == loginModel.Email).SingleOrDefault();
-                if (client != null)
+                var client = this.RepositoryClients.SearchFor(x => x.Email == loginModel.Email).SingleOrDefault();
+                if (client == null)
                 {
-                    // user is exist in db - redirect to client for MS Exchange
-                }
-                else
-                {
-                    rep.Add(
+                    this.RepositoryClients.Add(
                         new Client
                             {
                                 Email = loginModel.Email,
@@ -366,8 +411,7 @@
                                         ConfigurationManager.AppSettings["KeyForAESCrypto"])
                             });
 
-                    // Crypto.HashPassword(loginModel.Password)
-                    rep.Save();
+                    this.RepositoryClients.Save();
                 }
             }
             catch (Exception)
@@ -413,15 +457,19 @@
 
             var service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
             var client = FormsAuthenticationHelper.CurrentClient;
-            FindItemsResults<Item> findResults;
 
             if (client != null)
             {
-                service.Credentials = new WebCredentials(client.Email.Split('@')[0], MyCryptoHelper.DecryptStringAES(client.Password, ConfigurationManager.AppSettings["KeyForAESCrypto"]));
+                service.Credentials = new WebCredentials(
+                    client.Email.Split('@')[0],
+                    MyCryptoHelper.DecryptStringAES(
+                        client.Password,
+                        ConfigurationManager.AppSettings["KeyForAESCrypto"]));
                 service.AutodiscoverUrl(client.Email);
 
                 try
                 {
+                    FindItemsResults<Item> findResults;
                     switch (emailCatalog)
                     {
                         case EmailCatalog.Inbox:
@@ -441,8 +489,7 @@
                             break;
                     }
 
-                    foreach (
-                        var item in findResults)
+                    foreach (var item in findResults)
                     {
                         var email = (EmailMessage)item;
                         if (email.InternetMessageId == id)
@@ -454,7 +501,18 @@
                             else
                             {
                                 email.Delete(DeleteMode.MoveToDeletedItems);
-                            } 
+                            }
+
+                    var catalogId = this.RepositoryCatalogs.SearchFor(x => x.CatalogName == emailCatalog.ToString())
+                        .Select(x => x.CatalogId)
+                        .SingleOrDefault();
+
+                            var emailForDeleting = this.RepositoryEmailItems.SearchFor(
+                                emailDeleting => emailDeleting.InternetMessageId == id 
+                                    && emailDeleting.CatalogId == catalogId).SingleOrDefault();
+
+                            this.RepositoryEmailItems.Delete(emailForDeleting);
+                            this.RepositoryEmailItems.Save();
                         }
                     }
                 }

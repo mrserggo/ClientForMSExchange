@@ -5,18 +5,39 @@
     using System.Linq;
     using System.Web;
     using System.Web.Security;
-
     using Core.EntityFrameworkDAL.Entities;
     using Core.EntityFrameworkDAL.Repositories;
     using Core.EntityFrameworkDAL.Repositories.Interfaces;
 
+    using Microsoft.Ajax.Utilities;
+
     using MyClientForMSExchange.Models;
+
+    using Ninject;
 
     /// <summary>
     /// Helper for authentication
     /// </summary>
     public class FormsAuthenticationHelper : IAuthenticationHelper
     {
+        /// <summary>
+        /// Gets or sets the repository clients.
+        /// </summary>
+        /// <value>
+        /// The repository clients.
+        /// </value>
+        [Inject]
+        public IRepository<Client> RepositoryClients { get; set; }
+
+        /// <summary>
+        /// Gets or sets the repository clients static.
+        /// </summary>
+        /// <value>
+        /// The repository clients static.
+        /// </value>
+        [Inject]
+        public static IRepository<Client> RepositoryClientsStatic { get; set; }
+
         /// <summary>
         /// Logins the specified user email.
         /// </summary>
@@ -26,10 +47,12 @@
         /// <returns></returns>
         public bool Login(string userEmail, string password, bool isPersistent)
         {
-            var rep = new Repository<Client>(new MyClientForMSExchangeContainer());
-            Client client = rep.SearchFor(p => p.Email == userEmail).SingleOrDefault();
+            // var rep = new Repository<Client>(new MyClientForMSExchangeContainer());
+            Client client = this.RepositoryClients.SearchFor(p => p.Email == userEmail).SingleOrDefault();
 
-            if ((client != null) && (MyCryptoHelper.DecryptStringAES(client.Password, ConfigurationManager.AppSettings["KeyForAESCrypto"]) == password))
+            if ((client != null) 
+                && 
+                (MyCryptoHelper.DecryptStringAES(client.Password, ConfigurationManager.AppSettings["KeyForAESCrypto"]) == password))
             {
                 this.CreateCookie(client, isPersistent);
                 return true;
@@ -108,8 +131,8 @@
                                 }
                                 else
                                 {
-                                    var rep = new Repository<Client>(new MyClientForMSExchangeContainer());
-                                    var client = rep.SearchFor(p => p.Email == formsAuthenticationTicket.Name).SingleOrDefault();
+                                    // var rep = new Repository<Client>(new MyClientForMSExchangeContainer());
+                                    var client = RepositoryClientsStatic.SearchFor(p => p.Email == formsAuthenticationTicket.Name).SingleOrDefault();
 
                                     HttpContext.Current.Session["authsession"] = client;
                                 }

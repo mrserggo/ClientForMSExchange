@@ -1,6 +1,7 @@
 ﻿namespace MyClientForMSExchange.Controllers
 {
     using System.Web.Mvc;
+    using Core.EntityFrameworkDAL.Constants;
     using MyClientForMSExchange.Helpers;
     using MyClientForMSExchange.Models;
     using Ninject;
@@ -60,12 +61,12 @@
 
                         return RedirectToAction(MVC.Home.Index());
                     }
-                    
-                    ModelState.AddModelError(string.Empty, "Login or password is uncorrect");
+
+                    ModelState.AddModelError(string.Empty, Constants.LoginorPasswordisUncorrectErrorMessage);
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Uncorrect data for enrty to the system of Client MS Exchange");
+                    ModelState.AddModelError(string.Empty, Constants.UncorrectDataforEnrtytotheSystemofClientMSExchangeErrorMessage);
                 }
 
                 return View(loginModel);

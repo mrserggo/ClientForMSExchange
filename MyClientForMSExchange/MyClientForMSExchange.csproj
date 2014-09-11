@@ -188,8 +188,16 @@
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\NinjectDependencyResolver.cs" />
+    <Compile Include="Migrations\201409101258263_InitialCreate.cs" />
+    <Compile Include="Migrations\201409101258263_InitialCreate.Designer.cs">
+      <DependentUpon>201409101258263_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201409101429479_AddedTablesforMSExchange.cs" />
+    <Compile Include="Migrations\201409101429479_AddedTablesforMSExchange.Designer.cs">
+      <DependentUpon>201409101429479_AddedTablesforMSExchange.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\HomeViewModels.cs" />
     <Compile Include="Models\MyClientForMSEvchangeContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SharedController.generated.cs">
@@ -204,7 +212,7 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\CustomStyles.css" />
+    <Content Include="Content\customstyles.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -269,6 +277,14 @@
       <Project>{a2bf281f-fa9b-4c20-9de1-b176db62c3b5}</Project>
       <Name>Core.EntityFrameworkDAL</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201409101258263_InitialCreate.resx">
+      <DependentUpon>201409101258263_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201409101429479_AddedTablesforMSExchange.resx">
+      <DependentUpon>201409101429479_AddedTablesforMSExchange.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -3,7 +3,14 @@
     using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
+
+    using Core.EntityFrameworkDAL.Entities;
+    using Core.EntityFrameworkDAL.Repositories;
+    using Core.EntityFrameworkDAL.Repositories.Interfaces;
+
     using MyClientForMSExchange.Helpers;
+    using MyClientForMSExchange.Models;
+
     using Ninject;
 
     /// <summary>
@@ -60,6 +67,9 @@
         {
             this.kernel.Bind<IAuthenticationHelper>().To<FormsAuthenticationHelper>();
             this.kernel.Bind<IMSExchangeHelper>().To<MSExchangeHelper>();
+            this.kernel.Bind(typeof(IRepository<Catalog>)).To<Repository<Catalog>>().WithConstructorArgument("dataContext", new MyClientForMSExchangeContainer());
+            this.kernel.Bind(typeof(IRepository<EmailItem>)).To<Repository<EmailItem>>().WithConstructorArgument("dataContext", new MyClientForMSExchangeContainer());
+            this.kernel.Bind(typeof(IRepository<Client>)).To<Repository<Client>>().WithConstructorArgument("dataContext", new MyClientForMSExchangeContainer());
         }
     }
 }

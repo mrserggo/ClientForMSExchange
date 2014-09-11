@@ -4,6 +4,7 @@
     using System.IO;
     using System.Security.Cryptography;
     using System.Text;
+    using Core.EntityFrameworkDAL.Constants;
 
     /// <summary>
     /// Helper for crypt password in db
@@ -162,16 +163,16 @@
         /// </exception>
         private static byte[] ReadByteArray(Stream s)
         {
-            byte[] rawLength = new byte[sizeof(int)];
+            var rawLength = new byte[sizeof(int)];
             if (s.Read(rawLength, 0, rawLength.Length) != rawLength.Length)
             {
-                throw new SystemException("Stream did not contain properly formatted byte array");
+                throw new SystemException(Constants.StreamDidNotContainProperlyFormattedByteArrayExceptionMessage);
             }
 
-            byte[] buffer = new byte[BitConverter.ToInt32(rawLength, 0)];
+            var buffer = new byte[BitConverter.ToInt32(rawLength, 0)];
             if (s.Read(buffer, 0, buffer.Length) != buffer.Length)
             {
-                throw new SystemException("Did not read byte array properly");
+                throw new SystemException(Constants.DidNotReadByteArrayProperlyExceptionMessage);
             }
 
             return buffer;

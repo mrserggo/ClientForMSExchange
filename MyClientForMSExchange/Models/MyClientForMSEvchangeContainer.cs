@@ -24,5 +24,15 @@
         /// The clients.
         /// </value>
         public DbSet<Client> Clients { get; set; }
+
+        /// <summary>
+        /// Gets or sets the catalogs.
+        /// </summary>
+        public DbSet<Catalog> Catalogs { get; set; }
+
+        /// <summary>
+        /// Gets or sets the email items.
+        /// </summary>
+        public DbSet<EmailItem> EmailItems { get; set; }
     }
 }

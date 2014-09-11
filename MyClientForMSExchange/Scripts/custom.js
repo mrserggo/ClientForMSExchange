@@ -4,9 +4,9 @@
         $('#deleteBtn').bind("click", DeleteEmail);
     });
 
-    $(function () {
-        $('#loadBtn').bind("click", LoadEmails);
-    });
+    //$(function () {
+    //    $('#loadBtn').bind("click", LoadEmails);
+    //});
 
     //get mails for current catalog
     LoadEmails();
@@ -16,7 +16,7 @@
 //get body for choosed email subject by InternetMailId
 function GetSelectedEmail(id) {
 
-    $.get('GetBodyEmailById?Id=' + id + '&' + 'eStringCatalog='+$('.active').children().first().text(), null, function (data) {
+    $.get('GetBodyEmailById?Id=' + id + '&' + 'emailStringCatalog='+$('.active').children().first().text(), null, function (data) {
 
         var divWithBody = $("<div/>").append(data);
 
@@ -28,7 +28,7 @@ function LoadEmails() {
 
     var activeCatalog = $('.active').children().first().text();
 
-    $.get('GetEmails?eStringCatalog=' + activeCatalog,
+    $.get('GetEmails?emailStringCatalog=' + activeCatalog,
         null,
         function (data) {
 
@@ -69,7 +69,7 @@ function LoadEmails() {
 function DeleteEmail() {
 
     if (confirm("Are you approve deleting?")) {
-        $.get('DeleteEmailById?Id='+ $('.selected').attr("Id")+'&' + 'eStringCatalog='+$('.active').children().first().text() );
+        $.get('DeleteEmailById?Id='+ $('.selected').attr("Id")+'&' + 'emailStringCatalog='+$('.active').children().first().text() );
         window.location.href = "DeletedItems";
     } else {
         return false;
