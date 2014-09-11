@@ -196,6 +196,10 @@
     <Compile Include="Migrations\201409101429479_AddedTablesforMSExchange.Designer.cs">
       <DependentUpon>201409101429479_AddedTablesforMSExchange.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201409111147175_AddedReferencesFromClienttoEmailItemOnetoMany.cs" />
+    <Compile Include="Migrations\201409111147175_AddedReferencesFromClienttoEmailItemOnetoMany.Designer.cs">
+      <DependentUpon>201409111147175_AddedReferencesFromClienttoEmailItemOnetoMany.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\MyClientForMSEvchangeContainer.cs" />
@@ -284,6 +288,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201409101429479_AddedTablesforMSExchange.resx">
       <DependentUpon>201409101429479_AddedTablesforMSExchange.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201409111147175_AddedReferencesFromClienttoEmailItemOnetoMany.resx">
+      <DependentUpon>201409111147175_AddedReferencesFromClienttoEmailItemOnetoMany.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

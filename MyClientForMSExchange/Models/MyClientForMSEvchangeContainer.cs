@@ -12,8 +12,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="MyClientForMSExchangeContainer"/> class.
         /// </summary>
-        public MyClientForMSExchangeContainer()
-            : base("name=MyConnection")
+        public MyClientForMSExchangeContainer() : base("name=MyConnection")
         {
         }
 
@@ -34,5 +33,20 @@
         /// Gets or sets the email items.
         /// </summary>
         public DbSet<EmailItem> EmailItems { get; set; }
+
+        /// <summary>
+        /// The on model creating.
+        /// </summary>
+        /// <param name="modelBuilder">
+        /// The model builder.
+        /// </param>
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            // one-to-many 
+            modelBuilder.Entity<EmailItem>().HasRequired<Client>(s => s.Client)
+             .WithMany(s => s.EmailItems).HasForeignKey(s => s.ClientId);
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

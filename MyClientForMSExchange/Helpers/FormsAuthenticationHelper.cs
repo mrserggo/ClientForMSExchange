@@ -9,8 +9,6 @@
     using Core.EntityFrameworkDAL.Repositories;
     using Core.EntityFrameworkDAL.Repositories.Interfaces;
 
-    using Microsoft.Ajax.Utilities;
-
     using MyClientForMSExchange.Models;
 
     using Ninject;
@@ -131,8 +129,8 @@
                                 }
                                 else
                                 {
-                                    // var rep = new Repository<Client>(new MyClientForMSExchangeContainer());
-                                    var client = RepositoryClientsStatic.SearchFor(p => p.Email == formsAuthenticationTicket.Name).SingleOrDefault();
+                                     var rep = new Repository<Client>(new MyClientForMSExchangeContainer());
+                                     var client = rep.SearchFor(p => p.Email == formsAuthenticationTicket.Name).SingleOrDefault();
 
                                     HttpContext.Current.Session["authsession"] = client;
                                 }

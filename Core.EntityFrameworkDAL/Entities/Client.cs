@@ -1,5 +1,6 @@
 ﻿namespace Core.EntityFrameworkDAL.Entities
 {
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     using Core.EntityFrameworkDAL.Repositories.Interfaces;
@@ -30,6 +31,14 @@
         [MaxLength(250)]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
+        /// <summary>
+        /// Gets or sets the email items.
+        /// </summary>
+        /// <value>
+        /// The email items.
+        /// </value>
+        public virtual ICollection<EmailItem> EmailItems { get; set; }
 
         #endregion
     }

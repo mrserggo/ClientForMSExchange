@@ -151,6 +151,7 @@
                             break;
                     }
 
+                    var clientId = FormsAuthenticationHelper.CurrentClient.Id;
                     var catalogId =
                         this.RepositoryCatalogs.SearchFor(x => x.CatalogName == emailCatalog.ToString())
                             .Select(x => x.CatalogId)
@@ -168,7 +169,8 @@
                                     CreationDate = item.Item.DateTimeCreated,
                                     InternetMessageId = ((EmailMessage)item.Item).InternetMessageId,
                                     Subject = item.Item.Subject,
-                                    CatalogId = catalogId
+                                    CatalogId = catalogId,
+                                    ClientId = clientId
                                 }).ToList();
 
                     foreach (var emailItem in emailItemCollection)
@@ -185,7 +187,7 @@
                     }
 
                     var allEmailsInCatalog =
-                        this.RepositoryEmailItems.GetAll().Where(element => element.CatalogId == catalogId).OrderByDescending(element => element.CreationDate);
+                        this.RepositoryEmailItems.GetAll().Where(element => element.CatalogId == catalogId && element.ClientId == clientId).OrderByDescending(element => element.CreationDate);
 
                     foreach (var item in allEmailsInCatalog)
                     {
@@ -337,10 +339,17 @@
                 .Select(x => x.CatalogId)
                 .SingleOrDefault();
 
+            // var body =
+            // this.RepositoryClients.GetById((int)FormsAuthenticationHelper.CurrentClient.Id)
+            // .EmailItems.Where(item => item.InternetMessageId == id && item.CatalogId == catalogId)
+            // .Select(x => x.Body).SingleOrDefault();
+            var clientId = FormsAuthenticationHelper.CurrentClient.Id;
+
             var body =
-                this.RepositoryEmailItems.SearchFor(item => item.InternetMessageId == id && item.CatalogId == catalogId)
-                    .Select(x => x.Body)
-                    .SingleOrDefault();
+                this.RepositoryEmailItems.SearchFor(item => item.InternetMessageId == id 
+                    && 
+                    item.CatalogId == catalogId
+                    && item.ClientId == clientId).Select(x => x.Body).SingleOrDefault();
 
             return body;
         }

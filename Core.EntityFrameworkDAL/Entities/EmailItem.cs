@@ -45,5 +45,9 @@
         /// Gets or sets the catalog.
         /// </summary>
         public virtual Catalog Catalog { get; set; }
+
+        public long ClientId { get; set; }
+
+        public virtual Client Client { get; set; }
     }
 }

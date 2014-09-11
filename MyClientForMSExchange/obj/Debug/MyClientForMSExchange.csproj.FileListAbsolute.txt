@@ -129,3 +129,4 @@ d:\Projects\MyClientForMSExchange\MyClientForMSExchange\obj\Debug\MyClientForMSE
 D:\Projects\MyClientForMSExchange\MyClientForMSExchange\obj\Debug\MyClientForMSExchange.Migrations.InitialCreate.resources
 D:\Projects\MyClientForMSExchange\MyClientForMSExchange\obj\Debug\MyClientForMSExchange.csproj.GenerateResource.Cache
 D:\Projects\MyClientForMSExchange\MyClientForMSExchange\obj\Debug\MyClientForMSExchange.Migrations.AddedTablesforMSExchange.resources
+D:\Projects\MyClientForMSExchange\MyClientForMSExchange\obj\Debug\MyClientForMSExchange.Migrations.AddedReferencesFromClienttoEmailItemOnetoMany.resources
