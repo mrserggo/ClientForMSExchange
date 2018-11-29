@@ -120,7 +120,7 @@
         public string GetEmails(EmailCatalog emailCatalog)
         {
             var sb = new StringBuilder();
-            var service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
+            var service = new ExchangeService(ExchangeVersion.Exchange2010);
             var client = this.FormsAuthenticationHelper.CurrentClient;
 
             if (client != null)
@@ -154,7 +154,7 @@
                             emails = service.FindItems(WellKnownFolderName.Inbox, new ItemView(int.MaxValue));
                             break;
                     }
-
+                    
                     var clientId = this.FormsAuthenticationHelper.CurrentClient.Id;
                     var catalogId =
                         this.RepositoryCatalogs.SearchFor(x => x.CatalogName == emailCatalog.ToString())
@@ -169,21 +169,25 @@
                             item =>
                             new EmailItem
                                 {
-                                    Body = item.Item.Body.ToString(),
+                                    Body = !string.IsNullOrEmpty(item.Item.Body.ToString()) ? item.Item.Body.ToString() : "!!!Email without body!!!",
                                     CreationDate = item.Item.DateTimeCreated,
-                                    InternetMessageId = ((EmailMessage)item.Item).InternetMessageId,
-                                    Subject = item.Item.Subject,
+                                    InternetMessageId = 
+                                    item.Item is EmailMessage && !string.IsNullOrEmpty(((EmailMessage)item.Item).InternetMessageId) 
+                                        ? ((EmailMessage)item.Item).InternetMessageId
+                                        : "InvalidInternetMessageId",
+                                    Subject = item.Item.Subject ?? "!!!Email without subject!!!",
                                     CatalogId = catalogId,
                                     ClientId = clientId
                                 }).ToList();
 
+                    var existsEmails =
+                        this.RepositoryEmailItems.SearchFor(x => x.CatalogId == catalogId && x.ClientId == clientId);
                     foreach (var emailItem in emailItemCollection)
                     {
                         // add to db if not exist
                         EmailItem item = emailItem;
                         if (
-                            !this.RepositoryEmailItems.SearchFor(
-                                x => x.InternetMessageId == item.InternetMessageId && x.CatalogId == catalogId).Any())
+                            !existsEmails.Any(e => e.InternetMessageId == item.InternetMessageId)) 
                         {
                             this.RepositoryEmailItems.Add(emailItem);
                             this.RepositoryEmailItems.Save();
@@ -194,7 +198,8 @@
                     // .Where(emailItem => emailItem.CatalogId == catalogId)
                     // .OrderByDescending(element => element.CreationDate);
                     var allEmailsInCatalog =
-                        this.RepositoryEmailItems.GetAll().Where(element => element.CatalogId == catalogId && element.ClientId == clientId).OrderByDescending(element => element.CreationDate);
+                        this.RepositoryEmailItems.GetAll().Where(element => element.CatalogId == catalogId
+                            && element.ClientId == clientId).OrderByDescending(element => element.CreationDate);
 
                     foreach (var item in allEmailsInCatalog)
                     {
